@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Meal Alternatives — Bulk Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@400;500;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #f7f3ed;
+  --bg2: #efe9df;
+  --bg3: #e8dfcf;
+  --surface: #ffffff;
+  --surface2: #faf7f2;
+  --ink: #1c1710;
+  --ink2: #2e2820;
+  --border: #ddd5c4;
+  --border2: #ccc0a8;
+  --muted: #8a7e6c;
+  --muted2: #a89880;
+
+  /* Meal accent colors */
+  --m1: #d44b1a;   /* pre-workout — burnt orange */
+  --m1s: rgba(212,75,26,0.09);
+  --m2: #2563a8;   /* post-workout — deep blue */
+  --m2s: rgba(37,99,168,0.09);
+  --m3: #1f7a4a;   /* breakfast — forest */
+  --m3s: rgba(31,122,74,0.09);
+  --m4: #7c3aab;   /* lunch — plum */
+  --m4s: rgba(124,58,171,0.09);
+  --m5: #0e8c8c;   /* snack — teal */
+  --m5s: rgba(14,140,140,0.09);
+  --m6: #c07d10;   /* dinner — gold */
+  --m6s: rgba(192,125,16,0.09);
+
+  --fraunces: 'Fraunces', Georgia, serif;
+  --body: 'DM Sans', sans-serif;
+  --mono: 'Fira Code', monospace;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  min-height: 100vh;
+}
+
+/* Subtle paper texture */
+body::before {
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(212,75,26,0.025) 0%, transparent 60%),
+    radial-gradient(circle at 80% 20%, rgba(31,122,74,0.025) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+.page {max-width:1100px;margin:0 auto;padding:56px 24px 100px;position:relative;z-index:1;}
+
+/* ─── HEADER ─── */
+.header {
+  margin-bottom: 64px;
+  padding-bottom: 40px;
+  border-bottom: 2px solid var(--ink);
+  animation: fadeUp 0.7s ease both;
+}
+
+.header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.header-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-eyebrow::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--muted);
+  display: inline-block;
+}
+
+.header h1 {
+  font-family: var(--fraunces);
+  font-size: clamp(44px, 7vw, 88px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -2px;
+  color: var(--ink);
+}
+
+.header h1 .italic {
+  font-style: italic;
+  color: var(--m1);
+}
+
+.header-right {
+  padding-top: 12px;
+}
+
+.header-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 480px;
+  margin-top: 18px;
+}
+
+.rule-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.rule-pill {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 5px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--muted);
+}
+.rule-pill.p-green { background: rgba(31,122,74,0.08); color: var(--m3); border-color: rgba(31,122,74,0.3); }
+.rule-pill.p-red { background: rgba(212,75,26,0.08); color: var(--m1); border-color: rgba(212,75,26,0.3); }
+
+/* ─── MEAL FILTER BAR ─── */
+.filter-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  position: sticky;
+  top: 12px;
+  z-index: 100;
+  background: var(--bg);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border2);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.filter-btn:hover { border-color: var(--ink2); color: var(--ink); }
+.filter-btn.active {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+.filter-btn[data-meal="1"].active { background: var(--m1); border-color: var(--m1); }
+.filter-btn[data-meal="2"].active { background: var(--m2); border-color: var(--m2); }
+.filter-btn[data-meal="3"].active { background: var(--m3); border-color: var(--m3); }
+.filter-btn[data-meal="4"].active { background: var(--m4); border-color: var(--m4); }
+.filter-btn[data-meal="5"].active { background: var(--m5); border-color: var(--m5); }
+.filter-btn[data-meal="6"].active { background: var(--m6); border-color: var(--m6); }
+
+/* ─── MEAL SECTION ─── */
+.meal-section {
+  margin-bottom: 64px;
+  animation: fadeUp 0.5s ease both;
+}
+.meal-section:nth-child(1){animation-delay:0.05s;}
+.meal-section:nth-child(2){animation-delay:0.1s;}
+.meal-section:nth-child(3){animation-delay:0.15s;}
+.meal-section:nth-child(4){animation-delay:0.2s;}
+.meal-section:nth-child(5){animation-delay:0.25s;}
+.meal-section:nth-child(6){animation-delay:0.3s;}
+
+.meal-section.hidden { display: none; }
+
+.meal-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.meal-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  color: #fff;
+  font-weight: 500;
+}
+
+.m1-bg { background: var(--m1); }
+.m2-bg { background: var(--m2); }
+.m3-bg { background: var(--m3); }
+.m4-bg { background: var(--m4); }
+.m5-bg { background: var(--m5); }
+.m6-bg { background: var(--m6); }
+
+.meal-title-wrap { flex: 1; }
+.meal-title {
+  font-family: var(--fraunces);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+.meal-timing {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.macro-chips {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.mc-chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted2);
+}
+
+/* ─── FOOD ITEM ─── */
+.food-swap {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.food-swap:hover {
+  box-shadow: 0 4px 20px rgba(28,23,16,0.07);
+}
+
+.food-swap-header {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+}
+
+.food-original {
+  flex: 1;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.fo-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.fo-info { flex: 1; }
+.fo-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+.fo-amount {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+.fo-macros {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.fom {
+  text-align: center;
+  padding: 0 8px;
+}
+.fom-v {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink2);
+  line-height: 1;
+}
+.fom-l {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--muted2);
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+.toggle-btn {
+  padding: 16px 20px;
+  background: var(--bg2);
+  border-left: 1px solid var(--border);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+  user-select: none;
+}
+.toggle-btn:hover {
+  background: var(--bg3);
+  color: var(--ink);
+}
+.toggle-btn .arrow {
+  font-size: 14px;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+.toggle-btn.open .arrow { transform: rotate(180deg); }
+
+/* ─── ALTERNATIVES PANEL ─── */
+.alts-panel {
+  display: none;
+  border-top: 1px solid var(--border);
+  background: var(--surface2);
+  padding: 20px;
+}
+.alts-panel.open { display: block; }
+
+.alts-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.alts-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.alts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.alt-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  transition: border-color 0.15s, transform 0.15s;
+  cursor: default;
+}
+.alt-card:hover {
+  transform: translateY(-2px);
+}
+
+.alt-card-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.alt-emoji { font-size: 20px; flex-shrink: 0; }
+.alt-name { font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.2; flex: 1; }
+
+.alt-amount {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  padding: 3px 0;
+  border-top: 1px dashed var(--border);
+  border-bottom: 1px dashed var(--border);
+}
+
+.alt-macros {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.am-pill {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 100px;
+  background: var(--bg2);
+  color: var(--muted2);
+  border: 1px solid var(--border);
+}
+.am-pill.pro { background: rgba(212,75,26,0.08); color: var(--m1); border-color: rgba(212,75,26,0.2); }
+.am-pill.carb { background: rgba(37,99,168,0.08); color: var(--m2); border-color: rgba(37,99,168,0.2); }
+.am-pill.fat { background: rgba(192,125,16,0.08); color: var(--m6); border-color: rgba(192,125,16,0.2); }
+
+.alt-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.match-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 2px;
+  margin-top: 8px;
+}
+.match-exact { background: rgba(31,122,74,0.1); color: var(--m3); border: 1px solid rgba(31,122,74,0.25); }
+.match-close { background: rgba(192,125,16,0.1); color: var(--m6); border: 1px solid rgba(192,125,16,0.25); }
+.match-diff { background: rgba(37,99,168,0.1); color: var(--m2); border: 1px solid rgba(37,99,168,0.25); }
+
+/* ─── WEEKLY ROTATION GUIDE ─── */
+.rotation-section {
+  margin-bottom: 64px;
+}
+
+.week-rotation {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.wr-day {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 10px;
+  text-align: center;
+}
+
+.wr-day-name {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.wr-meals { list-style: none; }
+.wr-meal {
+  font-size: 11px;
+  color: var(--ink2);
+  padding: 3px 0;
+  border-bottom: 1px dashed var(--border);
+  line-height: 1.4;
+}
+.wr-meal:last-child { border-bottom: none; }
+.wr-meal span {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted2);
+  display: block;
+}
+
+/* ─── PROTEIN SOURCES TABLE ─── */
+.protein-table-wrap {
+  margin-bottom: 64px;
+  overflow-x: auto;
+}
+.protein-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 13px;
+}
+.protein-table th {
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  text-align: left;
+}
+.protein-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.protein-table tr:last-child td { border-bottom: none; }
+.protein-table tr:hover td { background: var(--bg2); }
+.protein-table td:nth-child(2) { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.protein-table td:nth-child(3) { font-family: var(--mono); font-size: 12px; color: var(--m3); }
+
+.tier-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.tier-s { background: rgba(212,75,26,0.1); color: var(--m1); border: 1px solid rgba(212,75,26,0.25); }
+.tier-a { background: rgba(31,122,74,0.1); color: var(--m3); border: 1px solid rgba(31,122,74,0.25); }
+.tier-b { background: rgba(37,99,168,0.1); color: var(--m2); border: 1px solid rgba(37,99,168,0.25); }
+
+/* ─── CARB SOURCES ─── */
+.carb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 64px;
+}
+.carb-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  transition: transform 0.15s;
+}
+.carb-card:hover { transform: translateY(-2px); }
+.carb-icon { font-size: 24px; margin-bottom: 8px; }
+.carb-name { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.carb-per { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-bottom: 6px; }
+.carb-note { font-size: 11.5px; color: var(--muted2); line-height: 1.5; }
+
+/* ─── TIPS ─── */
+.tips-banner {
+  background: var(--ink);
+  color: var(--bg);
+  border-radius: 10px;
+  padding: 32px 36px;
+  margin-bottom: 40px;
+}
+.tips-banner h3 {
+  font-family: var(--fraunces);
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+.tips-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  list-style: none;
+}
+.tips-list li {
+  font-size: 13px;
+  color: rgba(247,243,237,0.75);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.65;
+}
+.tips-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--m1);
+  font-size: 12px;
+  top: 2px;
+}
+.tips-list li strong { color: var(--bg); }
+
+/* FOOTER */
+.footer {
+  border-top: 2px solid var(--ink);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-title { font-family: var(--fraunces); font-size: 20px; font-weight: 700; font-style: italic; color: var(--m1); }
+.footer-note { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@media(max-width:700px){
+  .meal-header{flex-wrap:wrap;}
+  .macro-chips{display:none;}
+  .week-rotation{grid-template-columns:repeat(4,1fr);}
+  .carb-grid{grid-template-columns:repeat(2,1fr);}
+  .filter-bar{gap:4px;}
+  .filter-btn{padding:6px 10px;font-size:9px;}
+  .fo-macros{display:none;}
+  .alts-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ─── HEADER ─── -->
+<div class="header">
+  <div class="header-eyebrow">Maximum Muscle Mass · Food Swap Guide</div>
+  <div class="header-top">
+    <div>
+      <h1>Food<br/><em class="italic">Alternatives</em></h1>
+      <p class="header-desc">Every food in your 6-meal plan has 3–4 swappable alternatives matched to the <strong>same macros</strong>. Rotate freely — your macros stay on target regardless of what you pick.</p>
+      <div class="rule-pills">
+        <span class="rule-pill p-green">✓ Same protein target</span>
+        <span class="rule-pill p-green">✓ Same calorie range</span>
+        <span class="rule-pill p-red">✗ Don't swap pre + post workout carbs</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FILTER BAR ─── -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-meal="0" onclick="filterMeals(0)">All Meals</button>
+  <button class="filter-btn" data-meal="1" onclick="filterMeals(1)">M1 Pre-Workout</button>
+  <button class="filter-btn" data-meal="2" onclick="filterMeals(2)">M2 Post-Workout</button>
+  <button class="filter-btn" data-meal="3" onclick="filterMeals(3)">M3 Breakfast</button>
+  <button class="filter-btn" data-meal="4" onclick="filterMeals(4)">M4 Lunch</button>
+  <button class="filter-btn" data-meal="5" onclick="filterMeals(5)">M5 Snack</button>
+  <button class="filter-btn" data-meal="6" onclick="filterMeals(6)">M6 Dinner</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- MEAL 1 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="meal-section" data-meal="1">
+  <div class="meal-header">
+    <span class="meal-badge m1-bg">M1 · 4:15 AM</span>
+    <div class="meal-title-wrap">
+      <div class="meal-title">Pre-Workout Fuel</div>
+      <div class="meal-timing">Goal: Fast + slow carbs · light protein · no heaviness</div>
+    </div>
+    <div class="macro-chips">
+      <span class="mc-chip">~560 kcal</span>
+      <span class="mc-chip">32g protein</span>
+      <span class="mc-chip">72g carbs</span>
+    </div>
+  </div>
+
+  <!-- Bread -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🍞</div>
+        <div class="fo-info">
+          <div class="fo-name">Brown Bread (2 slices)</div>
+          <div class="fo-amount">~60g · 30g carbs · 6g protein</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">6g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">30g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">2g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Brown Bread</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫓</div><div class="alt-name">Whole Wheat Roti (2)</div></div>
+          <div class="alt-amount">2 medium rotis · ~60g</div>
+          <div class="alt-macros"><span class="am-pill pro">6g pro</span><span class="am-pill carb">28g carb</span><span class="am-pill fat">2g fat</span></div>
+          <div class="alt-note">More fiber than bread. Better for gut health. Easy to carry to gym bag in a container.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌾</div><div class="alt-name">Overnight Oats (dry 50g)</div></div>
+          <div class="alt-amount">50g oats + water/milk · prep night before</div>
+          <div class="alt-macros"><span class="am-pill pro">7g pro</span><span class="am-pill carb">34g carb</span><span class="am-pill fat">3g fat</span></div>
+          <div class="alt-note">Slower digestion = steady energy through entire workout. Add 1 tsp honey.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍠</div><div class="alt-name">Sweet Potato (150g boiled)</div></div>
+          <div class="alt-amount">150g cooked · boil night before</div>
+          <div class="alt-macros"><span class="am-pill pro">3g pro</span><span class="am-pill carb">32g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Elite pre-workout carb. Low GI, loaded with potassium. Reduces muscle cramps mid-session.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥣</div><div class="alt-name">Rice Cakes (4 plain)</div></div>
+          <div class="alt-amount">4 rice cakes · ~60g total</div>
+          <div class="alt-macros"><span class="am-pill pro">2g pro</span><span class="am-pill carb">30g carb</span><span class="am-pill fat">1g fat</span></div>
+          <div class="alt-note">Fast digesting. Light on stomach before training. Pair with peanut butter as usual.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Peanut Butter -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🥜</div>
+        <div class="fo-info">
+          <div class="fo-name">Peanut Butter (2 tbsp)</div>
+          <div class="fo-amount">~32g · 8g protein · 16g fat</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">8g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">6g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">16g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Peanut Butter</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌰</div><div class="alt-name">Almond Butter (2 tbsp)</div></div>
+          <div class="alt-amount">32g · same serving</div>
+          <div class="alt-macros"><span class="am-pill pro">7g pro</span><span class="am-pill carb">6g carb</span><span class="am-pill fat">18g fat</span></div>
+          <div class="alt-note">Higher in Vitamin E and magnesium. Better for testosterone. Slightly more expensive.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥚</div><div class="alt-name">Half Avocado</div></div>
+          <div class="alt-amount">~80g · spread on toast</div>
+          <div class="alt-macros"><span class="am-pill pro">2g pro</span><span class="am-pill carb">4g carb</span><span class="am-pill fat">14g fat</span></div>
+          <div class="alt-note">Monounsaturated fats = testosterone support. Add salt + chilli flakes. Great change in flavour.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫒</div><div class="alt-name">Hummus (4 tbsp)</div></div>
+          <div class="alt-amount">~80g · dip or spread</div>
+          <div class="alt-macros"><span class="am-pill pro">5g pro</span><span class="am-pill carb">10g carb</span><span class="am-pill fat">8g fat</span></div>
+          <div class="alt-note">Chickpea base adds plant protein. Lower in fat — add 5 almonds on the side to compensate.</div>
+          <span class="match-tag match-diff">Adjust slightly</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫙</div><div class="alt-name">Cashew Butter (2 tbsp)</div></div>
+          <div class="alt-amount">32g · same serving</div>
+          <div class="alt-macros"><span class="am-pill pro">5g pro</span><span class="am-pill carb">9g carb</span><span class="am-pill fat">14g fat</span></div>
+          <div class="alt-note">Creamier taste. Higher zinc content than PB — great for testosterone. Slightly fewer calories.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banana -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🍌</div>
+        <div class="fo-info">
+          <div class="fo-name">Banana (1 large)</div>
+          <div class="fo-amount">~120g · fast carbs · potassium</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">1g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">27g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">0g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Banana (pre-workout fast carb)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍇</div><div class="alt-name">Dates (4–5 medjool)</div></div>
+          <div class="alt-amount">4–5 dates · ~60g total</div>
+          <div class="alt-macros"><span class="am-pill pro">1g pro</span><span class="am-pill carb">28g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Extremely fast acting glucose. Used by elite athletes before training. Easy to eat at 4:30 AM.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍎</div><div class="alt-name">Apple (1 medium)</div></div>
+          <div class="alt-amount">~180g · raw</div>
+          <div class="alt-macros"><span class="am-pill pro">0g pro</span><span class="am-pill carb">25g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Slower than banana. Good on non-intense days. Quercetin in apple skin improves endurance.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍊</div><div class="alt-name">Mango (1 cup cubed)</div></div>
+          <div class="alt-amount">~165g · seasonal</div>
+          <div class="alt-macros"><span class="am-pill pro">1g pro</span><span class="am-pill carb">25g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">High GI, fast sugar release. Vitamin C bonus. Excellent pre-workout in summer months.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫐</div><div class="alt-name">Raisins + Honey (20g + 1 tsp)</div></div>
+          <div class="alt-amount">20g raisins + 5g honey</div>
+          <div class="alt-macros"><span class="am-pill pro">1g pro</span><span class="am-pill carb">28g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Best option when you don't have fresh fruit. Mix into oats or eat directly. Fastest carb spike.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- MEAL 2 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="meal-section" data-meal="2">
+  <div class="meal-header">
+    <span class="meal-badge m2-bg">M2 · 6:30 AM</span>
+    <div class="meal-title-wrap">
+      <div class="meal-title">Post-Workout Anabolic Window</div>
+      <div class="meal-timing">Goal: Fast protein + fast + moderate carbs · within 30 min</div>
+    </div>
+    <div class="macro-chips">
+      <span class="mc-chip">~580 kcal</span>
+      <span class="mc-chip">55g protein</span>
+      <span class="mc-chip">62g carbs</span>
+    </div>
+  </div>
+
+  <!-- Whey -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🥛</div>
+        <div class="fo-info">
+          <div class="fo-name">Whey Protein (1 scoop in milk)</div>
+          <div class="fo-amount">~30g protein · fast absorbing</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">30g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">10g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">3g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Whey Protein (post-workout)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥚</div><div class="alt-name">4 Whole Eggs + 4 Whites</div></div>
+          <div class="alt-amount">4 whole + 4 whites · scrambled</div>
+          <div class="alt-macros"><span class="am-pill pro">36g pro</span><span class="am-pill carb">2g carb</span><span class="am-pill fat">18g fat</span></div>
+          <div class="alt-note">Best whole-food alternative post-workout. Leucine in eggs is highest of any food. Slightly slower than whey but complete.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🧀</div><div class="alt-name">Paneer (200g) + Milk (200ml)</div></div>
+          <div class="alt-amount">200g paneer + 1 glass milk</div>
+          <div class="alt-macros"><span class="am-pill pro">32g pro</span><span class="am-pill carb">14g carb</span><span class="am-pill fat">18g fat</span></div>
+          <div class="alt-note">Good on days you run out of whey. Higher fat slows absorption slightly — still effective in the 60-min window.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🐟</div><div class="alt-name">Canned Tuna (2 cans, 150g)</div></div>
+          <div class="alt-amount">2 × 75g cans in water</div>
+          <div class="alt-macros"><span class="am-pill pro">34g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">2g fat</span></div>
+          <div class="alt-note">Fastest whole-food protein digestion after whey. Almost pure protein. Add rice or bread to hit carb target.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Oats -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🌾</div>
+        <div class="fo-info">
+          <div class="fo-name">Oats (60g dry)</div>
+          <div class="fo-amount">~220 kcal · 40g carbs · 7g protein</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">7g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">40g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">4g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Oats (post-workout carbs)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍚</div><div class="alt-name">White Rice (200g cooked)</div></div>
+          <div class="alt-amount">200g cooked weight</div>
+          <div class="alt-macros"><span class="am-pill pro">4g pro</span><span class="am-pill carb">44g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Fastest carb to replenish glycogen post-workout. Leftover from last night works perfectly.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍞</div><div class="alt-name">White Bread (3 slices)</div></div>
+          <div class="alt-amount">3 slices · ~90g total</div>
+          <div class="alt-macros"><span class="am-pill pro">7g pro</span><span class="am-pill carb">42g carb</span><span class="am-pill fat">3g fat</span></div>
+          <div class="alt-note">Post-workout is the one time white bread is actually ideal — fast GI spikes insulin for protein uptake.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍠</div><div class="alt-name">Boiled Potato (200g)</div></div>
+          <div class="alt-amount">200g plain boiled</div>
+          <div class="alt-macros"><span class="am-pill pro">4g pro</span><span class="am-pill carb">38g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">High GI. Quick glycogen refill. Cheap and easy to prep in bulk. Add salt only.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌽</div><div class="alt-name">Poha (60g dry)</div></div>
+          <div class="alt-amount">60g dry flattened rice</div>
+          <div class="alt-macros"><span class="am-pill pro">4g pro</span><span class="am-pill carb">45g carb</span><span class="am-pill fat">1g fat</span></div>
+          <div class="alt-note">South Asian staple. Fast carbs, light on stomach, cooks in 5 minutes. Add peanuts for protein boost.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- MEAL 3 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="meal-section" data-meal="3">
+  <div class="meal-header">
+    <span class="meal-badge m3-bg">M3 · 9:00 AM</span>
+    <div class="meal-title-wrap">
+      <div class="meal-title">Power Breakfast</div>
+      <div class="meal-timing">Goal: Sustained energy for work · continued muscle repair</div>
+    </div>
+    <div class="macro-chips">
+      <span class="mc-chip">~680 kcal</span>
+      <span class="mc-chip">52g protein</span>
+      <span class="mc-chip">72g carbs</span>
+    </div>
+  </div>
+
+  <!-- Roti -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🫓</div>
+        <div class="fo-info">
+          <div class="fo-name">Whole Wheat Roti (3)</div>
+          <div class="fo-amount">~90g total · 42g carbs · 9g protein</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">9g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">42g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">3g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Roti (breakfast complex carbs)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍞</div><div class="alt-name">Multigrain Bread (3 slices)</div></div>
+          <div class="alt-amount">3 thick slices · ~90g</div>
+          <div class="alt-macros"><span class="am-pill pro">9g pro</span><span class="am-pill carb">42g carb</span><span class="am-pill fat">3g fat</span></div>
+          <div class="alt-note">Easy office-day option. No cooking needed. Go for 100% whole grain, not "wheat bread" which can be refined.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌯</div><div class="alt-name">Whole Wheat Paratha (2)</div></div>
+          <div class="alt-amount">2 parathas (minimal oil)</div>
+          <div class="alt-macros"><span class="am-pill pro">8g pro</span><span class="am-pill carb">45g carb</span><span class="am-pill fat">8g fat</span></div>
+          <div class="alt-note">Higher calories due to oil. Reduce egg yolks by 1 to compensate for the fat difference. More filling.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍚</div><div class="alt-name">Upma (semolina, 80g dry)</div></div>
+          <div class="alt-amount">80g suji / semolina + veggies</div>
+          <div class="alt-macros"><span class="am-pill pro">8g pro</span><span class="am-pill carb">55g carb</span><span class="am-pill fat">2g fat</span></div>
+          <div class="alt-note">Traditional South Asian breakfast. Add peas + peanuts for extra protein. Very filling and fast to cook.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥞</div><div class="alt-name">Besan Chilla (2 large)</div></div>
+          <div class="alt-amount">2 large pancakes · 80g besan</div>
+          <div class="alt-macros"><span class="am-pill pro">16g pro</span><span class="am-pill carb">40g carb</span><span class="am-pill fat">4g fat</span></div>
+          <div class="alt-note">Chickpea flour pancakes — significantly more protein than roti. Reduce eggs by 1 on this day. Excellent variety.</div>
+          <span class="match-tag match-diff">Reduce eggs by 1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eggs M3 -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🍳</div>
+        <div class="fo-info">
+          <div class="fo-name">3 Eggs Half Fry</div>
+          <div class="fo-amount">~180g · 18g protein · 15g fat</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">18g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">2g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">15g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for 3 Eggs (breakfast protein)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥚</div><div class="alt-name">Egg Bhurji (3 eggs scrambled)</div></div>
+          <div class="alt-amount">3 eggs + onion + tomato + spices</div>
+          <div class="alt-macros"><span class="am-pill pro">18g pro</span><span class="am-pill carb">5g carb</span><span class="am-pill fat">15g fat</span></div>
+          <div class="alt-note">Same eggs, different prep. Masala bhurji is more satisfying and adds micronutrients from veggies.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🧀</div><div class="alt-name">Paneer Bhurji (150g)</div></div>
+          <div class="alt-amount">150g crumbled paneer + spices</div>
+          <div class="alt-macros"><span class="am-pill pro">18g pro</span><span class="am-pill carb">4g carb</span><span class="am-pill fat">16g fat</span></div>
+          <div class="alt-note">Exact egg swap for vegetarian days. Same protein and fat profile. Add turmeric + cumin for flavour.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🐔</div><div class="alt-name">Chicken Keema (100g)</div></div>
+          <div class="alt-amount">100g minced chicken · lightly spiced</div>
+          <div class="alt-macros"><span class="am-pill pro">22g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">10g fat</span></div>
+          <div class="alt-note">More protein, less fat than eggs. Prep in bulk, refrigerate. Great on high training days when protein needs are higher.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫘</div><div class="alt-name">Sprouts Salad (200g) + 2 Eggs</div></div>
+          <div class="alt-amount">200g mixed sprouts + 2 boiled eggs</div>
+          <div class="alt-macros"><span class="am-pill pro">20g pro</span><span class="am-pill carb">18g carb</span><span class="am-pill fat">12g fat</span></div>
+          <div class="alt-note">High enzyme content. Sprouts are nutritionally dense and add plant protein. Good change every 3rd day.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kidney Beans -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🫘</div>
+        <div class="fo-info">
+          <div class="fo-name">Kidney Beans / Rajma (100g cooked)</div>
+          <div class="fo-amount">~8g protein · 20g carbs · fiber</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">8g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">20g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">0g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Kidney Beans (legume protein + carbs)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🟡</div><div class="alt-name">Chana Dal / Chickpeas (100g)</div></div>
+          <div class="alt-amount">100g cooked · boil or use canned</div>
+          <div class="alt-macros"><span class="am-pill pro">9g pro</span><span class="am-pill carb">22g carb</span><span class="am-pill fat">2g fat</span></div>
+          <div class="alt-note">Slightly more protein than rajma. Higher in zinc. Make a quick chana masala or eat as chaat.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🟢</div><div class="alt-name">Moong Dal (100g cooked)</div></div>
+          <div class="alt-amount">100g cooked yellow moong</div>
+          <div class="alt-macros"><span class="am-pill pro">7g pro</span><span class="am-pill carb">19g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Easiest to digest of all legumes. Best on days when stomach feels heavy. Light but nutritious.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🟤</div><div class="alt-name">Black Beans (100g cooked)</div></div>
+          <div class="alt-amount">100g cooked black beans</div>
+          <div class="alt-macros"><span class="am-pill pro">9g pro</span><span class="am-pill carb">20g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Highest antioxidant content of any bean. Rich in iron and folate. Great for recovery.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌱</div><div class="alt-name">Edamame (100g shelled)</div></div>
+          <div class="alt-amount">100g shelled, frozen works fine</div>
+          <div class="alt-macros"><span class="am-pill pro">11g pro</span><span class="am-pill carb">10g carb</span><span class="am-pill fat">5g fat</span></div>
+          <div class="alt-note">Highest protein legume. Complete amino acids. Just microwave from frozen — zero prep time.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- MEAL 4 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="meal-section" data-meal="4">
+  <div class="meal-header">
+    <span class="meal-badge m4-bg">M4 · 1:00 PM</span>
+    <div class="meal-title-wrap">
+      <div class="meal-title">Mass Builder Lunch</div>
+      <div class="meal-timing">Goal: Highest calorie meal · max carb + protein · office lunch</div>
+    </div>
+    <div class="macro-chips">
+      <span class="mc-chip">~720 kcal</span>
+      <span class="mc-chip">52g protein</span>
+      <span class="mc-chip">82g carbs</span>
+    </div>
+  </div>
+
+  <!-- Chicken M4 -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🍗</div>
+        <div class="fo-info">
+          <div class="fo-name">Chicken Breast (200g cooked)</div>
+          <div class="fo-amount">~44g protein · 4g fat · lean mass king</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">44g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">0g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">4g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Chicken Breast (lunch protein)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🐟</div><div class="alt-name">Grilled Fish (200g)</div></div>
+          <div class="alt-amount">Rohu / Tilapia / Pomfret · 200g</div>
+          <div class="alt-macros"><span class="am-pill pro">42g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">6g fat</span></div>
+          <div class="alt-note">Best protein diversity choice. Omega-3 from fish reduces inflammation from training. Hit fish 2–3x/week.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🐣</div><div class="alt-name">Chicken Thigh (200g skinless)</div></div>
+          <div class="alt-amount">200g skinless cooked thigh</div>
+          <div class="alt-macros"><span class="am-pill pro">38g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">12g fat</span></div>
+          <div class="alt-note">Juicier and tastier than breast. Slightly more fat helps hormones. Reduce ghee on rice when eating thigh.</div>
+          <span class="match-tag match-close">Skip ghee on rice</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥩</div><div class="alt-name">Lean Mutton/Lamb (150g)</div></div>
+          <div class="alt-amount">150g cooked lean cuts</div>
+          <div class="alt-macros"><span class="am-pill pro">38g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">14g fat</span></div>
+          <div class="alt-note">Highest creatine content of any food (natural). High in zinc + B12. Eat once or twice a week for hormonal benefits.</div>
+          <span class="match-tag match-close">1–2x per week</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🧀</div><div class="alt-name">Paneer (250g) + Dal (100g)</div></div>
+          <div class="alt-amount">250g paneer + 100g dal (veg day)</div>
+          <div class="alt-macros"><span class="am-pill pro">40g pro</span><span class="am-pill carb">18g carb</span><span class="am-pill fat">20g fat</span></div>
+          <div class="alt-note">Full vegetarian lunch option. Paneer + dal together provide all essential amino acids. Reduce rice by 50g to balance calories.</div>
+          <span class="match-tag match-diff">Reduce rice 50g</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🦐</div><div class="alt-name">Prawns / Shrimp (250g)</div></div>
+          <div class="alt-amount">250g cooked prawns</div>
+          <div class="alt-macros"><span class="am-pill pro">47g pro</span><span class="am-pill carb">1g carb</span><span class="am-pill fat">3g fat</span></div>
+          <div class="alt-note">Highest protein density per calorie of any animal food. Iodine + selenium for thyroid and metabolism support.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rice M4 -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🍚</div>
+        <div class="fo-info">
+          <div class="fo-name">White Rice (200g cooked)</div>
+          <div class="fo-amount">~44g carbs · fast digesting</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">4g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">44g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">0g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for White Rice (lunch carbs)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🟤</div><div class="alt-name">Brown Rice (180g cooked)</div></div>
+          <div class="alt-amount">180g cooked weight</div>
+          <div class="alt-macros"><span class="am-pill pro">5g pro</span><span class="am-pill carb">40g carb</span><span class="am-pill fat">1g fat</span></div>
+          <div class="alt-note">More fiber and micronutrients. Slower digestion prevents afternoon energy crash. Takes longer to cook — prep in bulk.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫓</div><div class="alt-name">Roti (4) + Small Rice (100g)</div></div>
+          <div class="alt-amount">Mixed carbs on change days</div>
+          <div class="alt-macros"><span class="am-pill pro">8g pro</span><span class="am-pill carb">42g carb</span><span class="am-pill fat">3g fat</span></div>
+          <div class="alt-note">South Asian combination that hits all macros. Roti provides fiber while rice provides quick energy.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌾</div><div class="alt-name">Quinoa (80g dry / 200g cooked)</div></div>
+          <div class="alt-amount">80g dry · cook in chicken broth</div>
+          <div class="alt-macros"><span class="am-pill pro">10g pro</span><span class="am-pill carb">44g carb</span><span class="am-pill fat">3g fat</span></div>
+          <div class="alt-note">Complete protein carb source — rare. Higher protein than rice. Nutty flavor pairs well with any protein.</div>
+          <span class="match-tag match-close">Better macros</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍠</div><div class="alt-name">Sweet Potato (300g boiled)</div></div>
+          <div class="alt-amount">300g cooked weight</div>
+          <div class="alt-macros"><span class="am-pill pro">4g pro</span><span class="am-pill carb">40g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Rich in beta-carotene (reduces oxidative stress from training). Very filling. Great 2x a week.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- MEAL 5 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="meal-section" data-meal="5">
+  <div class="meal-header">
+    <span class="meal-badge m5-bg">M5 · 5:00 PM</span>
+    <div class="meal-title-wrap">
+      <div class="meal-title">Evening Snack</div>
+      <div class="meal-timing">Goal: Anti-catabolic bridge · micronutrients · satiety till dinner</div>
+    </div>
+    <div class="macro-chips">
+      <span class="mc-chip">~520 kcal</span>
+      <span class="mc-chip">44g protein</span>
+      <span class="mc-chip">42g carbs</span>
+    </div>
+  </div>
+
+  <!-- Egg Whites M5 -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🥚</div>
+        <div class="fo-info">
+          <div class="fo-name">4 Egg Whites</div>
+          <div class="fo-amount">~14g protein · 0 fat · pure protein</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">14g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">1g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">0g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Egg Whites (snack protein)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍗</div><div class="alt-name">Grilled Chicken Strips (80g)</div></div>
+          <div class="alt-amount">80g cooked · pre-prepped</div>
+          <div class="alt-macros"><span class="am-pill pro">18g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">2g fat</span></div>
+          <div class="alt-note">Office-friendly snack. Prep on Sunday, refrigerate. Eat cold or microwave at office. Season with herbs.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🐟</div><div class="alt-name">Canned Tuna (1 can)</div></div>
+          <div class="alt-amount">1 × 120g can in water</div>
+          <div class="alt-macros"><span class="am-pill pro">22g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">1g fat</span></div>
+          <div class="alt-note">Zero prep, office desk friendly. More protein than egg whites. Keep 3–4 cans in office drawer.</div>
+          <span class="match-tag match-close">Better protein</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🧀</div><div class="alt-name">Cottage Cheese / Paneer (100g)</div></div>
+          <div class="alt-amount">100g raw paneer · eat as is</div>
+          <div class="alt-macros"><span class="am-pill pro">12g pro</span><span class="am-pill carb">4g carb</span><span class="am-pill fat">8g fat</span></div>
+          <div class="alt-note">Slow-releasing casein. Good for late snack when dinner is still 3 hours away. Add chaat masala for taste.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫘</div><div class="alt-name">Roasted Chana (40g)</div></div>
+          <div class="alt-amount">40g roasted chickpeas</div>
+          <div class="alt-macros"><span class="am-pill pro">10g pro</span><span class="am-pill carb">22g carb</span><span class="am-pill fat">3g fat</span></div>
+          <div class="alt-note">Best desk snack for office. No refrigeration needed. High protein, high fiber. Pairs perfectly with peanut butter bread.</div>
+          <span class="match-tag match-diff">Add with bread</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Veggies M5 -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🥦</div>
+        <div class="fo-info">
+          <div class="fo-name">Veggie Mix (Broccoli, Cauli, etc.)</div>
+          <div class="fo-amount">25g each · steamed or stir-fried</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">6g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">12g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">0g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Veggie Mix (micronutrient load)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫑</div><div class="alt-name">Bell Peppers + Zucchini Stir-fry</div></div>
+          <div class="alt-amount">Red/green/yellow peppers + zucchini</div>
+          <div class="alt-macros"><span class="am-pill pro">3g pro</span><span class="am-pill carb">12g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">High Vitamin C + antioxidants. Fast in a pan with garlic. Good flavour change from the standard mix.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌿</div><div class="alt-name">Palak / Spinach Sauté (200g)</div></div>
+          <div class="alt-amount">200g spinach wilted in 1 tsp oil</div>
+          <div class="alt-macros"><span class="am-pill pro">5g pro</span><span class="am-pill carb">6g carb</span><span class="am-pill fat">1g fat</span></div>
+          <div class="alt-note">Highest iron of any vegetable. Nitrates improve blood flow to muscles. Great before leg day evening snack.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌽</div><div class="alt-name">Corn + Peas Salad (150g)</div></div>
+          <div class="alt-amount">Boiled corn + peas with lemon</div>
+          <div class="alt-macros"><span class="am-pill pro">6g pro</span><span class="am-pill carb">22g carb</span><span class="am-pill fat">1g fat</span></div>
+          <div class="alt-note">Higher carbs but adds plant protein from peas. Good on heavy training days when you need extra carbs.</div>
+          <span class="match-tag match-diff">Higher carbs</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥗</div><div class="alt-name">Greek Salad (cucumber, tomato, olives)</div></div>
+          <div class="alt-amount">Unlimited · no dressing except olive oil</div>
+          <div class="alt-macros"><span class="am-pill pro">3g pro</span><span class="am-pill carb">8g carb</span><span class="am-pill fat">5g fat</span></div>
+          <div class="alt-note">Zero cooking. Office/desk friendly. Olive oil provides healthy fats. Add feta if available.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- MEAL 6 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="meal-section" data-meal="6">
+  <div class="meal-header">
+    <span class="meal-badge m6-bg">M6 · 8:00 PM</span>
+    <div class="meal-title-wrap">
+      <div class="meal-title">Overnight Recovery Dinner</div>
+      <div class="meal-timing">Goal: Slow-release protein for overnight repair · no fruits · sleep quality</div>
+    </div>
+    <div class="macro-chips">
+      <span class="mc-chip">~680 kcal</span>
+      <span class="mc-chip">58g protein</span>
+      <span class="mc-chip">60g carbs</span>
+    </div>
+  </div>
+
+  <!-- Chicken M6 -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🍗</div>
+        <div class="fo-info">
+          <div class="fo-name">Chicken Breast / Thigh (200g)</div>
+          <div class="fo-amount">38–44g protein · dinner primary protein</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">42g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">0g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">8g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Chicken at Dinner</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🐟</div><div class="alt-name">Baked Salmon (180g)</div></div>
+          <div class="alt-amount">180g fillet · baked or pan-seared</div>
+          <div class="alt-macros"><span class="am-pill pro">38g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">18g fat</span></div>
+          <div class="alt-note">Omega-3 at night = best timing for anti-inflammatory effect during sleep. Skip fish oil supplement on salmon days.</div>
+          <span class="match-tag match-close">Skip fish oil cap</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥚</div><div class="alt-name">Egg Curry (4–5 eggs)</div></div>
+          <div class="alt-amount">4–5 boiled eggs in light masala curry</div>
+          <div class="alt-macros"><span class="am-pill pro">30g pro</span><span class="am-pill carb">4g carb</span><span class="am-pill fat">22g fat</span></div>
+          <div class="alt-note">Classic South Asian dinner. Casein + albumin combo digests slowly through the night. Good budget option.</div>
+          <span class="match-tag match-close">Close match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🐑</div><div class="alt-name">Lean Mutton Curry (150g)</div></div>
+          <div class="alt-amount">150g lean mutton in light gravy</div>
+          <div class="alt-macros"><span class="am-pill pro">35g pro</span><span class="am-pill carb">0g carb</span><span class="am-pill fat">14g fat</span></div>
+          <div class="alt-note">Zinc + creatine naturally. Use 1–2x per week max. Choose lean cuts, light cooking — heavy curry pre-sleep disrupts digestion.</div>
+          <span class="match-tag match-close">1–2x per week</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🧀</div><div class="alt-name">Paneer + Dal Makhani (Veg night)</div></div>
+          <div class="alt-amount">200g paneer + 150g dal makhani</div>
+          <div class="alt-macros"><span class="am-pill pro">38g pro</span><span class="am-pill carb">22g carb</span><span class="am-pill fat">20g fat</span></div>
+          <div class="alt-note">Full vegetarian dinner. Casein in paneer works overnight. Reduce rice by 50g on this day to balance.</div>
+          <span class="match-tag match-diff">Reduce rice 50g</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Curd M6 -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🍶</div>
+        <div class="fo-info">
+          <div class="fo-name">Curd / Dahi (200g full fat)</div>
+          <div class="fo-amount">~10g casein protein · probiotic · slow-release</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">10g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">8g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">6g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Curd (slow overnight protein)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥣</div><div class="alt-name">Greek Yogurt (180g)</div></div>
+          <div class="alt-amount">180g plain, unsweetened</div>
+          <div class="alt-macros"><span class="am-pill pro">18g pro</span><span class="am-pill carb">7g carb</span><span class="am-pill fat">4g fat</span></div>
+          <div class="alt-note">Almost double the protein of regular curd. Best upgrade you can make. Strained = less water, more casein concentration.</div>
+          <span class="match-tag match-close">Better protein</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🧀</div><div class="alt-name">Paneer (150g raw)</div></div>
+          <div class="alt-amount">150g raw paneer cubed or crumbled</div>
+          <div class="alt-macros"><span class="am-pill pro">24g pro</span><span class="am-pill carb">4g carb</span><span class="am-pill fat">18g fat</span></div>
+          <div class="alt-note">Pure casein protein. Slowest digesting dairy available. 7–8 hour release window. Best overnight muscle food.</div>
+          <span class="match-tag match-close">Better for overnight</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🥛</div><div class="alt-name">Warm Full-Fat Milk (300ml)</div></div>
+          <div class="alt-amount">300ml full-fat milk before bed</div>
+          <div class="alt-macros"><span class="am-pill pro">10g pro</span><span class="am-pill carb">14g carb</span><span class="am-pill fat">10g fat</span></div>
+          <div class="alt-note">Classic. Contains tryptophan which improves sleep quality. Add turmeric to make it your already-planned haldi doodh.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫙</div><div class="alt-name">Raita (curd + cucumber + cumin)</div></div>
+          <div class="alt-amount">250g curd + grated cucumber</div>
+          <div class="alt-macros"><span class="am-pill pro">12g pro</span><span class="am-pill carb">10g carb</span><span class="am-pill fat">7g fat</span></div>
+          <div class="alt-note">Add digestion + cooling effect. Cumin improves nutrient absorption. Perfect with rice or roti at dinner.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rice M6 -->
+  <div class="food-swap">
+    <div class="food-swap-header">
+      <div class="food-original">
+        <div class="fo-icon">🍚</div>
+        <div class="fo-info">
+          <div class="fo-name">Brown/White Rice (150g cooked)</div>
+          <div class="fo-amount">~33g carbs · dinner carb source</div>
+        </div>
+        <div class="fo-macros">
+          <div class="fom"><div class="fom-v">3g</div><div class="fom-l">pro</div></div>
+          <div class="fom"><div class="fom-v">33g</div><div class="fom-l">carb</div></div>
+          <div class="fom"><div class="fom-v">0g</div><div class="fom-l">fat</div></div>
+        </div>
+      </div>
+      <div class="toggle-btn" onclick="toggleAlts(this)"><span class="arrow">▼</span> Swap</div>
+    </div>
+    <div class="alts-panel">
+      <div class="alts-label">Alternatives for Rice (dinner carbs)</div>
+      <div class="alts-grid">
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🫓</div><div class="alt-name">2 Rotis + Small Dal (roti night)</div></div>
+          <div class="alt-amount">2 rotis + 80g dal</div>
+          <div class="alt-macros"><span class="am-pill pro">10g pro</span><span class="am-pill carb">40g carb</span><span class="am-pill fat">4g fat</span></div>
+          <div class="alt-note">Traditional Indian dinner. Dal + roti digests slower than rice at night — good for maintaining anabolic state longer.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🍠</div><div class="alt-name">Sweet Potato Mash (250g)</div></div>
+          <div class="alt-amount">250g boiled, lightly mashed</div>
+          <div class="alt-macros"><span class="am-pill pro">4g pro</span><span class="am-pill carb">34g carb</span><span class="am-pill fat">0g fat</span></div>
+          <div class="alt-note">Lower GI than white rice. Won't spike blood sugar at night. Better for quality sleep and overnight fat balance.</div>
+          <span class="match-tag match-exact">Exact match</span>
+        </div>
+        <div class="alt-card">
+          <div class="alt-card-top"><div class="alt-emoji">🌾</div><div class="alt-name">Millets — Bajra / Jowar Roti (3)</div></div>
+          <div class="alt-amount">3 millet rotis · pearl millet preferred</div>
+          <div class="alt-macros"><span class="am-pill pro">6g pro</span><span class="am-pill carb">36g carb</span><span class="am-pill fat">3g fat</span></div>
+          <div class="alt-note">Ancient grains with high magnesium content. Magnesium supports sleep quality and muscle relaxation overnight.</div>
+          <span class="match-tag match-close">Better for sleep</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WEEKLY ROTATION SUGGESTION ═══ -->
+<div class="rotation-section">
+  <div class="sec-title" style="font-family:var(--fraunces);font-size:32px;font-weight:700;margin-bottom:6px;">Suggested 7-Day <em style="font-style:italic;color:var(--m1);">Rotation</em></div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.7;">A simple rotation so you never eat the exact same thing two days in a row. All swaps maintain your macro targets.</p>
+  <div class="week-rotation">
+    <div class="wr-day">
+      <div class="wr-day-name">Mon</div>
+      <ul class="wr-meals">
+        <li class="wr-meal">Chicken breast<span>M4 + M6</span></li>
+        <li class="wr-meal">Oats + Whey<span>M2</span></li>
+        <li class="wr-meal">Rajma<span>M3</span></li>
+        <li class="wr-meal">White rice<span>M4</span></li>
+      </ul>
+    </div>
+    <div class="wr-day">
+      <div class="wr-day-name">Tue</div>
+      <ul class="wr-meals">
+        <li class="wr-meal">Grilled Fish<span>M4</span></li>
+        <li class="wr-meal">Poha + Eggs<span>M2</span></li>
+        <li class="wr-meal">Chana<span>M3</span></li>
+        <li class="wr-meal">Brown rice<span>M4</span></li>
+      </ul>
+    </div>
+    <div class="wr-day">
+      <div class="wr-day-name">Wed</div>
+      <ul class="wr-meals">
+        <li class="wr-meal">Chicken thigh<span>M4 + M6</span></li>
+        <li class="wr-meal">Rice + Whey<span>M2</span></li>
+        <li class="wr-meal">Besan Chilla<span>M3</span></li>
+        <li class="wr-meal">Quinoa<span>M4</span></li>
+      </ul>
+    </div>
+    <div class="wr-day">
+      <div class="wr-day-name">Thu</div>
+      <ul class="wr-meals">
+        <li class="wr-meal">REST DAY<span>-200 kcal</span></li>
+        <li class="wr-meal">Paneer dinner<span>M6 veg</span></li>
+        <li class="wr-meal">Moong dal<span>M3</span></li>
+        <li class="wr-meal">Sweet potato<span>M4</span></li>
+      </ul>
+    </div>
+    <div class="wr-day">
+      <div class="wr-day-name">Fri</div>
+      <ul class="wr-meals">
+        <li class="wr-meal">Prawns<span>M4</span></li>
+        <li class="wr-meal">Egg curry<span>M6</span></li>
+        <li class="wr-meal">Black beans<span>M3</span></li>
+        <li class="wr-meal">Roti + dal<span>M6</span></li>
+      </ul>
+    </div>
+    <div class="wr-day">
+      <div class="wr-day-name">Sat</div>
+      <ul class="wr-meals">
+        <li class="wr-meal">Salmon<span>M6</span></li>
+        <li class="wr-meal">Tuna + rice<span>M2</span></li>
+        <li class="wr-meal">Sprouts salad<span>M3</span></li>
+        <li class="wr-meal">Paratha<span>M3</span></li>
+      </ul>
+    </div>
+    <div class="wr-day">
+      <div class="wr-day-name">Sun</div>
+      <ul class="wr-meals">
+        <li class="wr-meal">REST DAY<span>Meal prep</span></li>
+        <li class="wr-meal">Mutton curry<span>M4 or M6</span></li>
+        <li class="wr-meal">Edamame<span>M3</span></li>
+        <li class="wr-meal">Millet roti<span>M6</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TIPS BANNER ═══ -->
+<div class="tips-banner">
+  <h3>Swapping Rules — Read Before You Rotate</h3>
+  <ul class="tips-list">
+    <li><strong>Never swap M1 + M2 carbs for low-GI options.</strong> Pre and post-workout carbs MUST be fast-digesting — banana, dates, white rice, white bread. This is the one rule with zero flexibility.</li>
+    <li><strong>Keep protein sources rotating.</strong> Each protein source has a different amino acid profile. Chicken, fish, eggs, paneer, dal — use all of them through the week for better muscle building.</li>
+    <li><strong>When using "adjust slightly" swaps</strong> — just compensate in the same meal. E.g., if paneer adds more fat, remove ghee from rice. You don't need to recalculate everything.</li>
+    <li><strong>Veg days (Thu/Sun rest days)</strong> are perfect for vegetarian meals — paneer, dal, rajma, chana, tofu. Lower activity = you don't need animal protein every meal.</li>
+    <li><strong>Fish 2–3x per week is the single best upgrade</strong> you can make to this plan. Natural omega-3 reduces DOMS, improves sleep, and supports muscle protein synthesis better than any supplement except creatine.</li>
+    <li><strong>Sunday meal prep:</strong> Batch cook chicken/fish for Mon–Wed. Boil eggs. Prep rice. This takes 1.5 hours and makes all swaps easy to execute at office without thinking.</li>
+  </ul>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-title">Eat Variety. Hit Macros. Grow.</div>
+  <div class="footer-note">All swaps maintain ~±50 kcal &amp; ±5g protein tolerance · Safe to rotate daily</div>
+</div>
+
+</div>
+
+<script>
+function toggleAlts(btn) {
+  const panel = btn.parentElement.nextElementSibling;
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  btn.innerHTML = `<span class="arrow">${isOpen ? '▼' : '▲'}</span> ${isOpen ? 'Swap' : 'Close'}`;
+}
+
+function filterMeals(mealNum) {
+  const sections = document.querySelectorAll('.meal-section');
+  const buttons = document.querySelectorAll('.filter-btn');
+
+  buttons.forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`[data-meal="${mealNum}"]`).classList.add('active');
+
+  sections.forEach(section => {
+    if (mealNum === 0) {
+      section.classList.remove('hidden');
+    } else {
+      const sectionMeal = parseInt(section.getAttribute('data-meal'));
+      section.classList.toggle('hidden', sectionMeal !== mealNum);
+    }
+  });
+}
+</script>
+</body>
+</html>
