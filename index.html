@@ -413,130 +413,728 @@ body::before{
 <div id="tab-training" class="panel">
   <div style="padding-top:36px"></div>
   <div class="slabel">Strength Programme</div>
-  <div class="sh2">PPL Split — Mon / Wed / Fri</div>
-  <p class="sdesc">3 phases over 11 weeks. Phase 1 (Wks 1–3): 3 sets · Phase 2 (Wks 4–7): 4 sets · Phase 3 (Wks 8–9): 4 sets heavy · Taper (Wks 10–11): reduce volume</p>
+  <div class="sh2">PPL — Week-by-Week Variation</div>
+  <p class="sdesc">Every week has different exercises to prevent adaptation, attack muscles from new angles, and stay mentally fresh. Core lifts (bench, row, squat) stay consistent — accessories rotate. Tap any week to see the full session.</p>
 
-  <div class="ppl-grid">
-    <!-- PUSH -->
-    <div class="ppl-card">
-      <div class="ppl-head push-head">
-        <div><div class="ppl-big">PUSH</div><div class="ppl-name">Chest · Shoulders · Triceps · ~50 min</div></div>
-        <div class="ppl-day" style="color:rgba(96,165,250,0.6)">Monday<br>Morning</div>
+  <style>
+  /* ── TRAINING TAB EXTRA STYLES ── */
+  .phase-banner{
+    border-radius:12px;padding:14px 20px;margin-bottom:18px;
+    display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;
+  }
+  .ph-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;}
+  .ph-desc{font-size:12px;line-height:1.7;}
+  .ph-weeks{font-family:'DM Mono',monospace;font-size:10px;text-align:right;white-space:nowrap;}
+
+  .week-accordion{display:flex;flex-direction:column;gap:8px;margin-bottom:32px;}
+  .wa{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .wa-head{
+    display:grid;grid-template-columns:90px 1fr auto auto;
+    align-items:center;padding:13px 18px;gap:12px;
+    cursor:pointer;transition:background 0.15s;
+  }
+  .wa-head:hover{background:rgba(255,255,255,0.025);}
+  .wa-wk{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;}
+  .wa-focus{font-size:12px;font-weight:600;color:var(--bright);}
+  .wa-focus span{font-size:10px;font-weight:400;color:var(--dim);margin-left:6px;}
+  .wa-tags{display:flex;gap:5px;}
+  .wa-tag{font-family:'DM Mono',monospace;font-size:8px;padding:2px 7px;border-radius:3px;letter-spacing:1px;white-space:nowrap;}
+  .wachev{font-size:10px;color:var(--muted);transition:transform 0.2s;}
+  .wa.open .wachev{transform:rotate(180deg);}
+  .wa-body{display:none;border-top:1px solid var(--border);}
+  .wa.open .wa-body{display:block;}
+
+  /* 3-col session grid inside accordion */
+  .session-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;}
+  .session-col{padding:16px 18px;border-right:1px solid var(--border);}
+  .session-col:last-child{border-right:none;}
+  .sc-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:3px;}
+  .sc-sub{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+
+  .lift{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+  .lift:last-child{border-bottom:none;}
+  .lift-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .lift-name{font-size:11.5px;font-weight:600;color:var(--bright);}
+  .lift-badge{font-family:'DM Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+  .lift-muscle{font-size:10px;color:var(--muted);margin-top:1px;}
+  .lift-cue{font-size:10px;color:var(--dim);margin-top:3px;line-height:1.5;font-style:italic;}
+  .lift-note{font-size:10px;margin-top:3px;padding:3px 7px;border-radius:4px;display:inline-block;}
+  .superset-label{
+    font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;
+    color:var(--yellow);background:var(--yellow-d);padding:2px 7px;border-radius:3px;
+    margin:6px 0 2px;display:inline-block;
+  }
+  .key-badge{font-family:'DM Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;background:rgba(249,115,22,0.12);color:var(--orange);margin-left:4px;}
+
+  /* efficiency legend */
+  .eff-legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+  .eff-item{display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);}
+  .eff-dot{width:8px;height:8px;border-radius:2px;}
+
+  @media(max-width:750px){
+    .session-grid{grid-template-columns:1fr;}
+    .session-col{border-right:none;border-bottom:1px solid var(--border);}
+    .session-col:last-child{border-bottom:none;}
+    .wa-head{grid-template-columns:70px 1fr auto;}
+    .wa-tags{display:none;}
+  }
+  </style>
+
+  <!-- EFFICIENCY KEY -->
+  <div class="banner" style="border-left-color:var(--yellow);margin-bottom:24px;">
+    <div class="bico">⚡</div>
+    <div>
+      <h3>How This Programme Is Built for Maximum Efficiency</h3>
+      <p>Each week rotates <strong>accessory exercises</strong> while keeping the core compound lifts (Bench Press, Row, Squat, Deadlift) consistent so you can track progress. <strong>Supersets</strong> are used on antagonist muscles (push+pull, quad+hamstring) to cut session time by 20% with no loss in stimulus. <strong>Mechanical drop sets</strong> appear in Phases 2–3 on peak exercises. Injury-prevention moves (Nordic curl, tibialis raise, face pull, clamshell) rotate placement but never disappear.</p>
+    </div>
+  </div>
+
+  <div class="eff-legend">
+    <div class="eff-item"><div class="eff-dot" style="background:var(--orange)"></div>Core compound — track weight every week</div>
+    <div class="eff-item"><div class="eff-dot" style="background:var(--yellow)"></div>Superset pair — do back-to-back with 15s transition</div>
+    <div class="eff-item"><div class="eff-dot" style="background:var(--green)"></div>Injury prevention — never skip regardless of time</div>
+    <div class="eff-item"><div class="eff-dot" style="background:var(--purple)"></div>New variation — different angle/stimulus vs last week</div>
+    <div class="eff-item"><div class="eff-dot" style="background:var(--teal)"></div>Drop set — reduce weight 20% after last set, rep to failure</div>
+  </div>
+
+  <!-- ═══ PHASE 1 ═══ -->
+  <div class="phase-banner" style="background:linear-gradient(135deg,rgba(96,165,250,0.08),rgba(96,165,250,0.03));border:1px solid rgba(96,165,250,0.2);">
+    <div class="ph-title" style="color:var(--blue)">PHASE 1</div>
+    <div><div style="font-size:13px;font-weight:600;color:var(--bright);margin-bottom:4px;">Build the Foundation</div><div class="ph-desc" style="color:var(--dim)">3 sets per exercise · Learn movement patterns · Moderate weight, perfect form · Introduce body to training stimulus · Supersets on isolation work only</div></div>
+    <div class="ph-weeks" style="color:var(--blue)">Weeks 1–3<br>3 × PPL</div>
+  </div>
+
+  <div class="week-accordion">
+
+    <!-- WEEK 1 -->
+    <div class="wa open">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--blue)">Week 1</div>
+        <div class="wa-focus">Foundation <span>— learn the movements, no ego</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--blue-d);color:var(--blue)">3 sets</div>
+          <div class="wa-tag" style="background:var(--orange-d);color:var(--orange)">Form Focus</div>
+        </div>
+        <div class="wachev">▼</div>
       </div>
-      <div class="ppl-body">
-        <div class="ex">
-          <div><div class="ex-n">Barbell Bench Press</div><div class="ex-m">Chest (primary), Front Delts, Triceps</div><div class="ex-cue">Retract scapula, arch slightly, bar to lower chest. Drive through full range.</div></div>
-          <div class="phases"><div class="ph ph-push">Ph1: 3×10</div><div class="ph ph-push">Ph2: 4×8</div><div class="ph ph-push">Ph3: 4×6</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Overhead Press (OHP)</div><div class="ex-m">Shoulders (primary), Triceps</div><div class="ex-cue">Standing or seated. Bar from upper chest to full lockout. Core braced — don't lean back.</div></div>
-          <div class="phases"><div class="ph ph-push">Ph1: 3×10</div><div class="ph ph-push">Ph2: 4×8</div><div class="ph ph-push">Ph3: 4×6</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Incline Dumbbell Press</div><div class="ex-m">Upper Chest, Front Delts</div><div class="ex-cue">30–45° incline. 3-second slow descent. Full stretch at bottom.</div></div>
-          <div class="phases"><div class="ph ph-push">Ph1: 3×12</div><div class="ph ph-push">Ph2: 3×10</div><div class="ph ph-push">Ph3: 4×8</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Lateral Raise</div><div class="ex-m">Side Delts — creates shoulder width</div><div class="ex-cue">Slight elbow bend, raise to shoulder height only. Slow and controlled — no momentum.</div></div>
-          <div class="phases"><div class="ph ph-push">Ph1: 3×15</div><div class="ph ph-push">Ph2: 3×15</div><div class="ph ph-push">Ph3: 4×12</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Tricep Pushdown</div><div class="ex-m">Triceps (cable or band)</div><div class="ex-cue">Elbows pinned to sides. Full extension at bottom. Squeeze hard.</div></div>
-          <div class="phases"><div class="ph ph-push">Ph1: 3×15</div><div class="ph ph-push">Ph2: 3×12</div><div class="ph ph-push">Ph3: 4×12</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Chest Dip</div><div class="ex-m">Lower Chest, Triceps</div><div class="ex-cue">Lean forward for chest focus. Lower slowly, pause at bottom. Add weight when 10 reps easy.</div></div>
-          <div class="phases"><div class="ph ph-push">Ph1: 3×8</div><div class="ph ph-push">Ph2: 3×10</div><div class="ph ph-push">Ph3: 4×10</div></div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <!-- PUSH W1 -->
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · Chest · Shoulders · Triceps · ~50 min</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Barbell Bench Press <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">3×10</div></div>
+              <div class="lift-muscle">Primary chest builder. Track this weight every single week.</div>
+              <div class="lift-cue">Retract scapula, slight arch, bar to lower chest. 2s down, explode up.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Dumbbell Shoulder Press</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×12</div></div>
+              <div class="lift-muscle">Front & side delts. Unilateral — fixes left-right imbalance.</div>
+              <div class="lift-cue">Palms facing forward. Press to lockout, lower slowly. Don't arch back.</div>
+            </div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Incline DB Press</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×12</div></div>
+              <div class="lift-muscle">Upper chest — most neglected area.</div>
+              <div class="lift-cue">30–45° incline. 3s down, full stretch at bottom.</div>
+            </div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Lateral Raise</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×15</div></div>
+              <div class="lift-muscle">Side delts — shoulder width. Pair with incline, no rest.</div>
+              <div class="lift-cue">Slight elbow bend. Raise to ear height max. Zero momentum.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Tricep Pushdown (rope)</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×15</div></div>
+              <div class="lift-muscle">Long head stretch at top. Both heads at bottom.</div>
+              <div class="lift-cue">Elbows pinned. Flare rope out at bottom. Full extension.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Push-Ups (controlled)</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×12</div></div>
+              <div class="lift-muscle">Chest/tricep finisher. 3s down, 1s pause at bottom.</div>
+              <div class="lift-cue">Hands slightly wider than shoulders. Full lockout at top.</div>
+            </div>
+          </div>
+          <!-- PULL W1 -->
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--purple)">PULL</div>
+            <div class="sc-sub">Wednesday · Back · Biceps · Rear Delts · ~50 min</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Barbell Bent-Over Row <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">3×10</div></div>
+              <div class="lift-muscle">Primary back mass builder. Track this weight every week.</div>
+              <div class="lift-cue">Hinge 45°. Pull bar to lower chest. Squeeze shoulder blades. 2s hold.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Lat Pulldown (wide grip)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12</div></div>
+              <div class="lift-muscle">Lat width. Wide grip hits outer lats hardest.</div>
+              <div class="lift-cue">Lean back 15°. Pull to upper chest. Stretch fully at top.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Face Pull <span class="lift-note" style="background:var(--green-d);color:var(--green)">Never Skip</span></div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15</div></div>
+              <div class="lift-muscle">Rear delts + rotator cuff. Protects shoulder for all pressing.</div>
+              <div class="lift-cue">Rope at face height. Pull to forehead, elbows flared, externally rotate at end.</div>
+            </div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Seated Cable Row</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12</div></div>
+              <div class="lift-muscle">Mid back thickness. Superset with face pull — no rest.</div>
+              <div class="lift-cue">Chest tall. Pull to belly button. 1s pause. Slow return.</div>
+            </div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">DB Bicep Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12</div></div>
+              <div class="lift-muscle">Full bicep. Supinate at top for peak contraction.</div>
+              <div class="lift-cue">Full range — all the way down each rep. No swinging at all.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Hammer Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12</div></div>
+              <div class="lift-muscle">Brachialis + long head. Builds arm thickness.</div>
+              <div class="lift-cue">Neutral grip, thumbs up. Same full range as regular curl.</div>
+            </div>
+          </div>
+          <!-- LEGS W1 -->
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · Quads · Hamstrings · Glutes · Calves · ~55 min</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Goblet Squat <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">3×12</div></div>
+              <div class="lift-muscle">Quad & glute foundation. Learn the squat pattern here.</div>
+              <div class="lift-cue">DB at chest. Below parallel. Knees out. 3s down. Drive through heels.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Romanian Deadlift <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">3×10</div></div>
+              <div class="lift-muscle">Hamstring length + strength. Single best hamstring injury preventer.</div>
+              <div class="lift-cue">Hip hinge. Push bum back. Feel deep stretch. Don't round back.</div>
+            </div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Hip Thrust (bodyweight/light)</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15</div></div>
+              <div class="lift-muscle">Glutes. Week 1 — bodyweight or light DB. Learn the movement.</div>
+              <div class="lift-cue">Upper back on bench. Drive hips up. Squeeze 2s at top.</div>
+            </div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Walking Lunges</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×10ea</div></div>
+              <div class="lift-muscle">Quads + glutes + balance. Pair with hip thrust.</div>
+              <div class="lift-cue">Long stride. Front knee tracks toes. Torso upright.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Single-Leg Calf Raise <span class="lift-note" style="background:var(--green-d);color:var(--green)">Injury Prevention</span></div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15ea</div></div>
+              <div class="lift-muscle">Calves. Step edge — heel below, full raise. 3s down.</div>
+              <div class="lift-cue">Full range of motion. Heel drops below step level each rep.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Tibialis Raise <span class="lift-note" style="background:var(--green-d);color:var(--green)">Injury Prevention</span></div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×20</div></div>
+              <div class="lift-muscle">Shin muscle. Prevents shin splints on running days.</div>
+              <div class="lift-cue">Back to wall, heels out 30cm. Lift toes as high as possible.</div>
+            </div>
+            <div class="lift">
+              <div class="lift-top"><div class="lift-name">Nordic Curl <span class="lift-note" style="background:var(--green-d);color:var(--green)">Injury Prevention</span></div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×5</div></div>
+              <div class="lift-muscle">Eccentric hamstring. Reduces hamstring tear risk by 50%.</div>
+              <div class="lift-cue">Kneel, feet anchored. Lower as slowly as humanly possible. Catch with hands.</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <!-- PULL -->
-    <div class="ppl-card">
-      <div class="ppl-head pull-head">
-        <div><div class="ppl-big">PULL</div><div class="ppl-name">Back · Biceps · Rear Delts · ~50 min</div></div>
-        <div class="ppl-day" style="color:rgba(192,132,252,0.6)">Wednesday<br>Morning</div>
+
+    <!-- WEEK 2 -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--blue)">Week 2</div>
+        <div class="wa-focus">Volume Up <span>— add reps or weight on main lifts</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--blue-d);color:var(--blue)">3 sets</div>
+          <div class="wa-tag" style="background:var(--purple-d);color:var(--purple)">New Accessories</div>
+        </div>
+        <div class="wachev">▼</div>
       </div>
-      <div class="ppl-body">
-        <div class="ex">
-          <div><div class="ex-n">Barbell / DB Row</div><div class="ex-m">Lats, Mid-Back, Biceps</div><div class="ex-cue">Hinge 45°, pull to lower chest/navel. Squeeze shoulder blades. No momentum.</div></div>
-          <div class="phases"><div class="ph ph-pull">Ph1: 3×10</div><div class="ph ph-pull">Ph2: 4×8</div><div class="ph ph-pull">Ph3: 4×6</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Lat Pulldown / Pull-Up</div><div class="ex-m">Lats (width), Biceps</div><div class="ex-cue">Lean back slightly, pull bar to upper chest. If pull-ups: full hang, chin over bar each rep.</div></div>
-          <div class="phases"><div class="ph ph-pull">Ph1: 3×10</div><div class="ph ph-pull">Ph2: 4×8</div><div class="ph ph-pull">Ph3: 4×6</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Face Pull ⚠️ Never Skip</div><div class="ex-m">Rear Delts, Rotator Cuff — injury prevention</div><div class="ex-cue">Rope at face height, pull to forehead with elbows flared. External rotation at end. Keeps shoulders healthy for running posture.</div></div>
-          <div class="phases"><div class="ph ph-pull">All: 3×15</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Seated Cable Row</div><div class="ex-m">Mid Back, Rhomboids</div><div class="ex-cue">Chest tall, pull to belly button, pause 1 second. Don't rock torso.</div></div>
-          <div class="phases"><div class="ph ph-pull">Ph1: 3×12</div><div class="ph ph-pull">Ph2: 3×10</div><div class="ph ph-pull">Ph3: 4×8</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">DB Bicep Curl</div><div class="ex-m">Biceps — full supination</div><div class="ex-cue">Supinate (palm up) as you curl. Full range — all the way down. No swinging.</div></div>
-          <div class="phases"><div class="ph ph-pull">Ph1: 3×12</div><div class="ph ph-pull">Ph2: 3×10</div><div class="ph ph-pull">Ph3: 4×10</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Hammer Curl</div><div class="ex-m">Biceps (long head), Brachialis — elbow health</div><div class="ex-cue">Neutral grip (thumbs up). Same motion as curl. Builds arm thickness and elbow stability.</div></div>
-          <div class="phases"><div class="ph ph-pull">Ph1: 3×12</div><div class="ph ph-pull">Ph2: 3×10</div><div class="ph ph-pull">Ph3: 3×10</div></div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · Chest variation focus</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bench Press <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">3×10</div></div><div class="lift-muscle">Add 2.5 kg if Week 1 felt easy on all 3 sets.</div><div class="lift-cue">Same form. Don't rush the descent.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Overhead Press (standing BB)</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×10</div></div><div class="lift-muscle">Standing OHP instead of DB — recruits more stabilisers.</div><div class="lift-cue">Bar from upper chest, fully lock out overhead. Core tight — no lean-back.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Cable Chest Fly (low-to-high)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×15 NEW</div></div><div class="lift-muscle">Inner + lower chest. Different angle vs Week 1 press.</div><div class="lift-cue">Set cables low, arc upward. Feel the chest stretch at the bottom.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Rear Delt Fly (cable/DB)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×15 NEW</div></div><div class="lift-muscle">Rear delts + posture. Pairs with fly — antagonist superset.</div><div class="lift-cue">Hinge forward 45°. Light weight. Squeeze at the back of the movement.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Skull Crusher (EZ bar)</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×12</div></div><div class="lift-muscle">Long head tricep — best isolation move for tricep mass.</div><div class="lift-cue">Lower bar to forehead, elbows in. Extend fully. Heavy here is fine.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Chest Dip</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×10</div></div><div class="lift-muscle">Lower chest finisher. Add a 5 kg plate if bodyweight is easy.</div><div class="lift-cue">Lean forward throughout. Pause at bottom. No bouncing.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--purple)">PULL</div>
+            <div class="sc-sub">Wednesday · Back width focus</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bent-Over Row <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">3×10</div></div><div class="lift-muscle">Progress weight by 2.5 kg if all reps were clean Week 1.</div><div class="lift-cue">Underhand grip this week (supinated) — hits lower lats harder.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Pull-Up / Assisted Pull-Up</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×6–8 NEW</div></div><div class="lift-muscle">Width and strength. Replaces lat pulldown — harder and better.</div><div class="lift-cue">Full hang, dead stop between reps. Chin clearly over bar. Use assist band if needed.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Face Pull <span class="lift-note" style="background:var(--green-d);color:var(--green)">Never Skip</span></div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15</div></div><div class="lift-muscle">External rotation health. Same as always.</div><div class="lift-cue">Same cue. Try a slightly heavier band/weight than Week 1.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Single-Arm DB Row</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×10ea NEW</div></div><div class="lift-muscle">Full lat stretch. Deeper ROM than barbell row.</div><div class="lift-cue">Rest hand on bench. Big pull. Feel lat from armpit to hip stretch fully.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Incline DB Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×10 NEW</div></div><div class="lift-muscle">Bicep long head. Incline = maximum stretch = more growth.</div><div class="lift-cue">Lie on 45° incline bench. Arms hang behind you. Full curl up slowly.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Hammer Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12</div></div><div class="lift-muscle">Brachialis thickness. Consistent from Week 1.</div><div class="lift-cue">Progress weight if Week 1 felt easy.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · Hamstring & glute focus</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Goblet Squat <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">3×12</div></div><div class="lift-muscle">Add 2.5–5 kg this week.</div><div class="lift-cue">Same form. Pause 1s at the bottom this week — more glute activation.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Romanian Deadlift <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">3×10</div></div><div class="lift-muscle">Add 5 kg this week.</div><div class="lift-cue">Heavier this week. Slow it down — 3s descent.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Bulgarian Split Squat</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×8ea NEW</div></div><div class="lift-muscle">Replaces hip thrust this week. Fixes leg imbalances.</div><div class="lift-cue">Rear foot elevated on bench. Slow down — 3s descent. Front thigh parallel.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Leg Curl (machine)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12 NEW</div></div><div class="lift-muscle">Isolated hamstring. Pairs with BSS — antagonist superset.</div><div class="lift-cue">Both legs. Full extension at start. Squeeze hamstrings at the top of the curl.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Single-Leg Calf Raise</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15ea</div></div><div class="lift-muscle">Same as Week 1. Add a small DB if easy.</div><div class="lift-cue">Try to add a small DB this week for progressive overload.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tibialis Raise</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×20</div></div><div class="lift-muscle">Shin protection. Consistent.</div><div class="lift-cue">Add a 5 kg plate on feet for extra resistance this week.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Nordic Curl</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×5</div></div><div class="lift-muscle">Eccentric hamstring protection.</div><div class="lift-cue">Same as Week 1. Focus on slowing the descent further.</div></div>
+          </div>
         </div>
       </div>
     </div>
-    <!-- LEGS -->
-    <div class="ppl-card">
-      <div class="ppl-head legs-head">
-        <div><div class="ppl-big">LEGS</div><div class="ppl-name">Quads · Hamstrings · Glutes · Calves · ~55 min</div></div>
-        <div class="ppl-day" style="color:rgba(74,222,128,0.6)">Friday<br>Morning</div>
+
+    <!-- WEEK 3 DELOAD -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--yellow)">Week 3</div>
+        <div class="wa-focus">Deload / Cutback <span>— drop 15% weight, tempo focus</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--yellow-d);color:var(--yellow)">2 sessions</div>
+          <div class="wa-tag" style="background:rgba(100,116,139,0.1);color:var(--muted)">Push + Legs only</div>
+        </div>
+        <div class="wachev">▼</div>
       </div>
-      <div class="ppl-body">
-        <div class="ex">
-          <div><div class="ex-n">Goblet Squat</div><div class="ex-m">Quads, Glutes — Runner Essential</div><div class="ex-cue">DB/KB at chest, squat deep below parallel. Drive knees out, chest tall. 3-second descent.</div></div>
-          <div class="phases"><div class="ph ph-legs">Ph1: 3×12</div><div class="ph ph-legs">Ph2: 4×10</div><div class="ph ph-legs">Ph3: 4×8</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Romanian Deadlift</div><div class="ex-m">Hamstrings, Glutes — prevents tears</div><div class="ex-cue">Hinge at hips, push bum back. Feel deep hamstring stretch. Don't round lower back.</div></div>
-          <div class="phases"><div class="ph ph-legs">Ph1: 3×10</div><div class="ph ph-legs">Ph2: 4×10</div><div class="ph ph-legs">Ph3: 4×8</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Bulgarian Split Squat</div><div class="ex-m">Quads, Glutes, Hip Stability</div><div class="ex-cue">Rear foot on bench. Front foot far forward. Lower slowly — front thigh parallel. Fixes imbalances.</div></div>
-          <div class="phases"><div class="ph ph-legs">Ph1: 3×8ea</div><div class="ph ph-legs">Ph2: 3×10ea</div><div class="ph ph-legs">Ph3: 4×8ea</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Hip Thrust (Barbell)</div><div class="ex-m">Glutes — Maximum activation</div><div class="ex-cue">Upper back on bench, bar across hips (use pad). Drive up, squeeze 2 seconds at top. Don't hyperextend back.</div></div>
-          <div class="phases"><div class="ph ph-legs">Ph1: 3×12</div><div class="ph ph-legs">Ph2: 4×12</div><div class="ph ph-legs">Ph3: 4×10</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Single-Leg Calf Raise</div><div class="ex-m">Calves — prevents Achilles & shin splints</div><div class="ex-cue">Stand on step edge. Lower heel BELOW step, raise to full height. 3-second slow lower. Most important for runners.</div></div>
-          <div class="phases"><div class="ph ph-legs">All: 3×15ea</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Tibialis Raise</div><div class="ex-m">Shins — prevents shin splints</div><div class="ex-cue">Back against wall, heels 30cm out. Lift toes as high as possible, lower slowly. Feel the burn on shins.</div></div>
-          <div class="phases"><div class="ph ph-legs">All: 3×20</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Nordic Hamstring Curl</div><div class="ex-m">Hamstrings (eccentric) — reduces injury risk 50%</div><div class="ex-cue">Kneel, feet anchored. Lower body forward AS SLOWLY AS POSSIBLE. Catch with hands. Pull back up. Never skip.</div></div>
-          <div class="phases"><div class="ph ph-legs">Ph1: 3×5</div><div class="ph ph-legs">Ph2: 3×6</div><div class="ph ph-legs">Ph3: 3×8</div></div>
-        </div>
-        <div class="ex">
-          <div><div class="ex-n">Clamshell (with band)</div><div class="ex-m">Glute Medius — prevents IT band & hip drop</div><div class="ex-cue">Lie on side, band above knees. Open top knee like clamshell — only move the hip. Don't let pelvis rotate.</div></div>
-          <div class="phases"><div class="ph ph-legs">All: 3×15ea</div></div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · Tempo & form week · Drop weight 15%</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bench Press</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×10 @85%</div></div><div class="lift-muscle">Use 85% of your Week 2 weight. Focus: 4-second eccentric.</div><div class="lift-cue">4s down, 1s pause, explode up. Best form week of the whole plan.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">DB Shoulder Press</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×12 @85%</div></div><div class="lift-muscle">Light and slow. Mind-muscle connection this week.</div><div class="lift-cue">3s down. Squeeze delts at the top.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Pec Deck / Machine Fly</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×15 NEW</div></div><div class="lift-muscle">Pure chest isolation. Great for pump and connection.</div><div class="lift-cue">Squeeze hard at the centre. Hold 1s. Stretch fully on return.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Cable Lateral Raise</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">3×20</div></div><div class="lift-muscle">High rep, light. Shoulder pump. Cable keeps tension throughout.</div><div class="lift-cue">Cross-body cable. Constant tension vs dumbbells. Feels different.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tricep Overhead Extension (DB)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12 NEW</div></div><div class="lift-muscle">Long head tricep stretch. Different angle from pushdown.</div><div class="lift-cue">Both hands on one DB overhead. Lower behind head. Feel the stretch.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--muted)">PULL</div>
+            <div class="sc-sub">Wednesday · REST — no Pull session this week</div>
+            <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px;">
+              <div style="font-size:28px;margin-bottom:8px;">😴</div>
+              Full rest on Wednesday.<br>No Pull session in Week 3.<br>Body absorbs Weeks 1–2 stimulus here.<br><br>
+              <div style="font-size:11px;color:var(--dim);">Walk, foam roll, stretch instead. This rest is why you get stronger.</div>
+            </div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · Lighter · Injury prevention focus</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Goblet Squat</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×12 @85%</div></div><div class="lift-muscle">Lighter. Pause 2s at bottom. Ultra slow eccentric.</div><div class="lift-cue">The paused squat hits quads and glutes harder than heavy fast squats.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Romanian Deadlift</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×10 @85%</div></div><div class="lift-muscle">Light and slow. Feel the hamstring stretch fully.</div><div class="lift-cue">4s down. This week is about learning the correct hip hinge under light load.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Single-Leg Glute Bridge</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×15ea NEW</div></div><div class="lift-muscle">Bodyweight glute activation. Tests hip stability — important for running.</div><div class="lift-cue">On floor. One leg up. Drive through heel. 2s squeeze at top.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Side-Lying Clamshell (band)</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×20ea</div></div><div class="lift-muscle">Glute medius. Prevents hip drop on long runs.</div><div class="lift-cue">Extra reps this week. Feel the outer hip working.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Single-Leg Calf Raise</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×20ea</div></div><div class="lift-muscle">Extra reps this week. Slow down even more.</div><div class="lift-cue">5s down. The slowest you've done them. Best calf development move.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tibialis Raise</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×25</div></div><div class="lift-muscle">Extra reps. Shin protection before big mileage weeks ahead.</div><div class="lift-cue">Higher reps this week. Feel the burn on the front of your shins.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Nordic Curl</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×5</div></div><div class="lift-muscle">Same. Never removed even in deload week.</div><div class="lift-cue">Slowest descent yet this week. 6–8 seconds down if possible.</div></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="slabel">Progression Rules</div>
+  <!-- ═══ PHASE 2 ═══ -->
+  <div class="phase-banner" style="background:linear-gradient(135deg,rgba(249,115,22,0.08),rgba(249,115,22,0.03));border:1px solid rgba(249,115,22,0.2);">
+    <div class="ph-title" style="color:var(--orange)">PHASE 2</div>
+    <div><div style="font-size:13px;font-weight:600;color:var(--bright);margin-bottom:4px;">Build Speed & Hypertrophy</div><div class="ph-desc" style="color:var(--dim)">4 sets per compound · Race pace running introduced · Superset compounds · Mechanical drop sets on peak exercises · New muscle angles each week</div></div>
+    <div class="ph-weeks" style="color:var(--orange)">Weeks 4–7<br>3 × PPL</div>
+  </div>
+
+  <div class="week-accordion">
+
+    <!-- WEEK 4 -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--orange)">Week 4</div>
+        <div class="wa-focus">Hypertrophy Begins <span>— 4 sets, heavier compounds</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--orange-d);color:var(--orange)">4 sets</div>
+          <div class="wa-tag" style="background:var(--purple-d);color:var(--purple)">New exercises</div>
+        </div>
+        <div class="wachev">▼</div>
+      </div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · 4 sets on main lifts</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bench Press <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×8</div></div><div class="lift-muscle">Heavier, fewer reps. Should feel challenging by rep 6.</div><div class="lift-cue">3-second descent. Explode up. Spotter if going heavy.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Overhead Press (BB) <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×8</div></div><div class="lift-muscle">Heavier OHP this week. Shoulder mass builder.</div><div class="lift-cue">Strict form. No momentum. Drive the bar vertically.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Dips (weighted)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×10 NEW</div></div><div class="lift-muscle">Add 5–10 kg plate. Chest + triceps compound.</div><div class="lift-cue">Lean forward for chest. Slow down. Pause 1s at bottom.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Cable Lateral Raise</div><div class="lift-badge" style="background:var(--blue-d);color:var(--blue)">4×15</div></div><div class="lift-muscle">Pairs with dips — no rest. Constant cable tension.</div><div class="lift-cue">Lean slightly away from cable. Better outer delt stretch.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Skull Crusher → Close Grip Press</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">3×10+max DROP</div></div><div class="lift-muscle">Mechanical drop set. Skull crusher to failure, immediately close-grip press.</div><div class="lift-cue">Don't re-rack — go straight from skull crusher to close-grip bench. Pure tricep burnout.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--purple)">PULL</div>
+            <div class="sc-sub">Wednesday · 4 sets · Width + thickness</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Row (overhand) <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×8</div></div><div class="lift-muscle">Overhand (pronated) — hits upper traps and rhomboids more.</div><div class="lift-cue">Pull to lower ribcage. Control the descent. 4s down.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Weighted Pull-Up</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×6 NEW</div></div><div class="lift-muscle">Add 5 kg plate. Pull-up with weight = serious lat builder.</div><div class="lift-cue">Full hang to full chin-over-bar. Dead stop between reps.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Face Pull</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15</div></div><div class="lift-muscle">Shoulder health. Same every week forever.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Chest-Supported Row (machine)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×10 NEW</div></div><div class="lift-muscle">Removes lower back fatigue. Pure mid-back isolation.</div><div class="lift-cue">Chest on pad. Pull elbows back as far as possible. 2s hold.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">EZ Bar Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×10 NEW</div></div><div class="lift-muscle">EZ bar = easier on wrists for heavier curls. More mass builder.</div><div class="lift-cue">Full range. Slow on the way down. No swinging.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Cross-Body Hammer Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12 NEW</div></div><div class="lift-muscle">Brachialis + brachioradialis. Curl across body instead of straight up.</div><div class="lift-cue">Curl DB across to opposite shoulder. Slow and controlled.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · 4 sets · Introduce heavier loading</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Back Squat <span class="key-badge">CORE NEW</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×8 NEW</div></div><div class="lift-muscle">Upgrade from goblet squat. Barbell = more load = more growth.</div><div class="lift-cue">Bar on traps. Squat to parallel or below. Drive knees out. Big air in before descent.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Romanian Deadlift <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×10</div></div><div class="lift-muscle">4 sets now. Add 5–10 kg vs Phase 1.</div><div class="lift-cue">Heavier this phase. Hip hinge must stay perfect — don't rush.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Hip Thrust</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×12 NEW</div></div><div class="lift-muscle">Heavy hip thrust with barbell. Glute mass builder.</div><div class="lift-cue">Use pad. Drive hips up hard. 2s squeeze. Don't hyperextend.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Bulgarian Split Squat</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×10ea</div></div><div class="lift-muscle">Pairs with hip thrust. Quad + glute from two angles back-to-back.</div><div class="lift-cue">Add DBs this week. Slow descent. 3s down.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Leg Press (high foot placement)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12 NEW</div></div><div class="lift-muscle">High feet = glute/hamstring bias. Low feet = quad. Use high today.</div><div class="lift-cue">Heels high on platform. Full range. Don't lock knees at top.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Single-Leg Calf Raise</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15ea</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tibialis Raise + Nordic Curl</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×20 / 3×6</div></div><div class="lift-muscle">Both injury prevention staples. Nordic reps increase by 1 this week.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 5 -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--orange)">Week 5</div>
+        <div class="wa-focus">Peak Volume <span>— biggest training week, race pace running</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--orange-d);color:var(--orange)">4 sets</div>
+          <div class="wa-tag" style="background:var(--red-d);color:var(--red)">Most demanding</div>
+        </div>
+        <div class="wachev">▼</div>
+      </div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · Volume peak · Push heaviest yet</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bench Press</div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×8</div></div><div class="lift-muscle">Should be heavier than all previous weeks. Personal best attempt.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Standing OHP</div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×8</div></div><div class="lift-muscle">Heavier than Week 4. Try for a 2.5 kg PB.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Low-to-High Cable Fly</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×12 NEW</div></div><div class="lift-muscle">Emphasises upper chest + pec minor. Different from Week 2.</div><div class="lift-cue">Cables set low. Arc upward in a wide squeeze. Feel the stretch at bottom.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">DB Front Raise</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12 NEW</div></div><div class="lift-muscle">Front delts. Pairs with fly. Different delt head from lateral raise.</div><div class="lift-cue">Alternate arms. Raise to eye level. Slow on the way down.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tricep Pushdown → Overhead Ext DROP</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">3×12+10 DROP</div></div><div class="lift-muscle">Mechanical drop set: pushdown (short head) immediately to overhead ext (long head).</div><div class="lift-cue">Pushdown to failure, grab lighter DB, immediately do overhead extension. Zero rest.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--purple)">PULL</div>
+            <div class="sc-sub">Wednesday · Peak pull session</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Row (underhand) <span class="key-badge">CORE</span></div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×8</div></div><div class="lift-muscle">Supinated grip this week. Lower lat + bicep emphasis.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Neutral Grip Pull-Up</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×8 NEW</div></div><div class="lift-muscle">Neutral grip = more bicep + brachialis involvement. Different feel.</div><div class="lift-cue">Parallel handles. Full hang. Squeeze at top. 3s down.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Face Pull</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15</div></div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Lat Pulldown (close grip)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×10 NEW</div></div><div class="lift-muscle">Close neutral grip = more lower lat stretch. Different from wide grip.</div><div class="lift-cue">Pull bar to sternum. Long stretch at top. Slow and controlled.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Concentration Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×10 NEW</div></div><div class="lift-muscle">Isolation peak contraction. Elbow braced on inner thigh.</div><div class="lift-cue">Slow. Squeeze at top 2s. Full stretch at bottom. Heavy here.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Reverse Curl (EZ bar)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12 NEW</div></div><div class="lift-muscle">Brachioradialis. Forearm thickness + elbow health for running arm drive.</div><div class="lift-cue">Overhand grip. Full range. Don't use momentum.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · 4 sets · New squat variation</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Front Squat / Hack Squat</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×8 NEW</div></div><div class="lift-muscle">Front squat = more quad dominance vs back squat. Perfect for runners.</div><div class="lift-cue">Bar across front delts. Elbows high. Stay upright. Deep as possible.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Romanian Deadlift</div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×10</div></div><div class="lift-muscle">Heavier than Week 4. Add 5 kg if form is clean.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Hip Thrust</div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×12</div></div><div class="lift-muscle">Heavier than Week 4. This is your glute peak week.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Nordic Hamstring Curl</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×6</div></div><div class="lift-muscle">Pairs with hip thrust. Eccentric hamstring loading.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Step-Up (weighted)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×12ea NEW</div></div><div class="lift-muscle">Functional quad + glute. Mimics running gait pattern.</div><div class="lift-cue">DBs in hands. Step onto box knee-height. Drive through front heel. Control down.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Single-Leg Calf Raise + Tibialis</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15ea / 3×20</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Lateral Band Walk</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×20ea NEW</div></div><div class="lift-muscle">Glute medius activation. Prevents hip drop on Sat long run.</div><div class="lift-cue">Band above knees. Side-step 20 right, 20 left. Keep pelvis level throughout.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 6 DELOAD -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--yellow)">Week 6</div>
+        <div class="wa-focus">Deload <span>— drop 10% weight, 3 sets, 2 gym sessions</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--yellow-d);color:var(--yellow)">Deload</div>
+          <div class="wa-tag" style="background:rgba(100,116,139,0.1);color:var(--muted)">Push + Legs only</div>
+        </div>
+        <div class="wachev">▼</div>
+      </div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · 90% Week 5 weight · 3 sets only</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bench Press</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×10 @90%</div></div><div class="lift-muscle">Lighter but keep form crisp. This week absorbs Weeks 4–5 growth.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">DB Shoulder Press</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×12</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Cable Fly (any direction)</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×15</div></div><div class="lift-muscle">Light isolation. Pump and blood flow. No grind sets.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tricep Pushdown</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×15</div></div><div class="lift-muscle">Light and easy. Maintenance only.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--muted)">PULL</div>
+            <div class="sc-sub">Wednesday · REST — no Pull session</div>
+            <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px;">
+              <div style="font-size:28px;margin-bottom:8px;">😴</div>
+              Full rest on Wednesday.<br>No Pull session.<br><br>
+              <div style="font-size:11px;color:var(--dim);">This is not weakness — it's how Phase 3 becomes possible. Your connective tissue recovers here.</div>
+            </div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · Light · Protect legs for Sat run</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Goblet Squat (back to basics)</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×12 light</div></div><div class="lift-muscle">Drop back to goblet squat. Back to basics. Deload week.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Romanian Deadlift</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×10 @90%</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Single-Leg Calf Raise</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15ea</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tibialis Raise + Nordic Curl + Clamshell</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">All 3×15–20</div></div><div class="lift-muscle">Full injury prevention circuit. Never skipped even in deload.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 7 -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--orange)">Week 7</div>
+        <div class="wa-focus">Speed Buffer <span>— fastest intervals + heaviest gym week so far</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--orange-d);color:var(--orange)">4 sets</div>
+          <div class="wa-tag" style="background:var(--red-d);color:var(--red)">Beat Week 5 weights</div>
+        </div>
+        <div class="wachev">▼</div>
+      </div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · Beat Week 5 weights</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bench Press <span class="key-badge">PB ATTEMPT</span></div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×8</div></div><div class="lift-muscle">Try to beat your Week 5 weight. This is your peak push strength moment.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Seated DB Press (Arnold Press)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×10 NEW</div></div><div class="lift-muscle">Arnold press = rotation through full delt range. Hits all 3 delt heads.</div><div class="lift-cue">Start palms facing you, rotate to palms forward as you press overhead.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Incline DB Press (steep 60°)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×8 NEW</div></div><div class="lift-muscle">Steeper incline = more upper chest + shoulder. Different to earlier weeks.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Lateral Raise 21s</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">3×21 METHOD</div></div><div class="lift-muscle">7 reps bottom half, 7 top half, 7 full range. Side delt destruction.</div><div class="lift-cue">Light weight. Non-stop 21 reps. Your delts will be on fire.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Dips (heavy)</div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×10</div></div><div class="lift-muscle">Heaviest dip session of the plan.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--purple)">PULL</div>
+            <div class="sc-sub">Wednesday · Beat Week 5 weights</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Row <span class="key-badge">PB ATTEMPT</span></div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×8</div></div><div class="lift-muscle">Try to beat Week 5. Overhand grip this week.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Cable Row (wide grip bar)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×10 NEW</div></div><div class="lift-muscle">Wide grip hits upper traps + rear delts more. Different feel.</div><div class="lift-cue">Wide grip. Pull to upper chest. Squeeze hard.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Face Pull</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15</div></div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Straight-Arm Pulldown</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×12 NEW</div></div><div class="lift-muscle">Isolates lats. Arms stay straight. Pure lat activation.</div><div class="lift-cue">Cable high. Arms straight, pull bar to thighs. Feel lat from armpit to hip.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Spider Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×10 NEW</div></div><div class="lift-muscle">Incline bench face-down. Eliminates all cheating. Peak bicep isolation.</div><div class="lift-cue">Chest on incline bench. Arms hang. Curl fully. Elbows stay fixed.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Wrist Curl + Reverse Wrist Curl</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">2×15ea NEW</div></div><div class="lift-muscle">Forearm strength for running arm drive in the final 5 km.</div><div class="lift-cue">Seated, forearms on thighs. Curl wrists up. Then reverse. Light weight.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · Peak legs · Hip thrust barbell max</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Back Squat <span class="key-badge">PB ATTEMPT</span></div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×8</div></div><div class="lift-muscle">Beat Week 5's squat weight. Your legs are peak strength right now.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Romanian Deadlift</div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×8</div></div><div class="lift-muscle">Fewer reps, heavier weight this week.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Hip Thrust (max load)</div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×10</div></div><div class="lift-muscle">Heaviest hip thrust of the plan. Glute peak week.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Nordic Hamstring Curl</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×6</div></div><div class="lift-muscle">Pairs with hip thrust. Always back-to-back.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Leg Extension (machine)</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×15 NEW</div></div><div class="lift-muscle">Quad isolation. Knee extension — great for patellar tendon strength.</div><div class="lift-cue">Full extension. 2s hold. 3s return. Don't hyperextend.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Single-Leg Calf Raise + Tibialis + Clamshell</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">All 3×15–20</div></div><div class="lift-muscle">Full injury prevention. Never skip. Race is 4 weeks away.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 3 ═══ -->
+  <div class="phase-banner" style="background:linear-gradient(135deg,rgba(248,113,113,0.08),rgba(248,113,113,0.03));border:1px solid rgba(248,113,113,0.2);">
+    <div class="ph-title" style="color:var(--red)">PHASE 3</div>
+    <div><div style="font-size:13px;font-weight:600;color:var(--bright);margin-bottom:4px;">Peak Strength + Taper</div><div class="ph-desc" style="color:var(--dim)">Weeks 8–9 peak heavy · Max effort on compounds · Drop sets on everything · Weeks 10–11 taper down rapidly · Injury prevention stays non-negotiable throughout</div></div>
+    <div class="ph-weeks" style="color:var(--red)">Weeks 8–11<br>Peak → Taper</div>
+  </div>
+
+  <div class="week-accordion">
+
+    <!-- WEEK 8 -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--red)">Week 8</div>
+        <div class="wa-focus">Absolute Peak <span>— heaviest week, test 5-rep maxes</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--red-d);color:var(--red)">4 sets heavy</div>
+          <div class="wa-tag" style="background:var(--teal-d);color:var(--teal)">Drop sets</div>
+        </div>
+        <div class="wachev">▼</div>
+      </div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · Peak push strength</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bench Press — 5 Rep Max</div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×6 + DROP</div></div><div class="lift-muscle">Test your 5-rep max today. After last set, immediately drop 20% weight and rep to failure.</div><div class="lift-cue">Spotter essential. Full focus. This is the heaviest push session of the 11 weeks.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">OHP (heavy)</div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×6</div></div><div class="lift-muscle">Heaviest OHP of the plan. Push for a new 6-rep record.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Weighted Dips</div><div class="lift-badge" style="background:var(--orange-d);color:var(--orange)">4×10</div></div><div class="lift-muscle">Heaviest dips. Add 10–15 kg if able.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Lateral Raise (heavy) + Drop</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">4×12 + DROP</div></div><div class="lift-muscle">After each set, halve the weight and immediately do 12 more. Best delt burnout.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tricep Giant Set</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">3 moves × 10 NEW</div></div><div class="lift-muscle">Pushdown → skull crusher → close grip press. No rest between moves. 10 reps each.</div><div class="lift-cue">One giant set counts as one set. 2 min rest after. 3 giant sets total.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--purple)">PULL</div>
+            <div class="sc-sub">Wednesday · Peak pull · Heaviest deadlifts</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Row (heavy)</div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×6 + DROP</div></div><div class="lift-muscle">Heaviest row of the plan. Drop 20% on last set, rep out.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Weighted Pull-Up (heavy)</div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×6</div></div><div class="lift-muscle">Heaviest pull-up — max added weight you can manage for 6 reps.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Face Pull</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15</div></div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Meadows Row</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">4×8ea NEW</div></div><div class="lift-muscle">Landmine row. Deepest lat stretch possible. John Meadows' signature move.</div><div class="lift-cue">Bar in landmine. Stagger stance. Pull bar to hip. Full stretch at bottom.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">21s Bicep Curl</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">3×21 METHOD</div></div><div class="lift-muscle">7 reps bottom half, 7 top half, 7 full range. Bicep complete annihilation.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Hammer + Reverse Curl superset</div><div class="lift-badge" style="background:var(--purple-d);color:var(--purple)">3×10 + 10</div></div><div class="lift-muscle">Both arms thickness moves back to back. Forearm + brachialis peak.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · Heaviest legs of the plan</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Back Squat (heavy)</div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×6 + DROP</div></div><div class="lift-muscle">Heaviest squat of the 11 weeks. Test your 6-rep max today.</div><div class="lift-cue">Drop 20% on last set and rep to failure. This is your peak leg day.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Romanian Deadlift (heavy)</div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×8</div></div><div class="lift-muscle">Heaviest RDL of the plan. Hamstrings must be fully warmed up.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Hip Thrust (max)</div><div class="lift-badge" style="background:var(--red-d);color:var(--red)">4×10</div></div><div class="lift-muscle">Heaviest hip thrust. Max glute load.</div></div>
+            <div class="superset-label">SUPERSET ↓</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Nordic Hamstring Curl</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×8</div></div><div class="lift-muscle">8 reps — peak eccentric load. As slow as possible.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Leg Press → Squat DROP</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">3×15 + bodyweight DROP</div></div><div class="lift-muscle">Mechanical drop set: leg press to failure, immediately bodyweight squat to failure.</div><div class="lift-cue">Rack the press, jump down, squat immediately. Zero rest. Pure quad pump.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Full injury prevention circuit</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">All 3 moves</div></div><div class="lift-muscle">Calf raise + Tibialis + Clamshell. 3 sets each. Race is 3 weeks away.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 9 -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--red)">Week 9</div>
+        <div class="wa-focus">Taper Begins <span>— 3 sets, drop 15% weight, reduce fatigue</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--yellow-d);color:var(--yellow)">3 sets</div>
+          <div class="wa-tag" style="background:var(--teal-d);color:var(--teal)">Volume ↓</div>
+        </div>
+        <div class="wachev">▼</div>
+      </div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · 85% week 8 weights · 3 sets</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Bench Press</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×8 @85%</div></div><div class="lift-muscle">Maintain stimulus, reduce fatigue. Body continues to adapt during taper.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">OHP</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×8 @85%</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">DB Incline Press + Lateral Raise</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×10 superset</div></div><div class="lift-muscle">Back to dumbbell for easier recovery. Superset as usual.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tricep Pushdown</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×12</div></div><div class="lift-muscle">Light. No drop sets this week.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--purple)">PULL</div>
+            <div class="sc-sub">Wednesday · Lighter · Keep all movements</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Barbell Row</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×8 @85%</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Lat Pulldown</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×10</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Face Pull</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">3×15</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">DB Curl + Hammer Curl</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×10 each</div></div><div class="lift-muscle">Light bicep work. Maintenance only.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · Light · Keep injury prevention priority</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Goblet Squat (back to basics)</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×12 light</div></div><div class="lift-muscle">Drop back to goblet squat for the taper. Legs need to be fresh for Sat run.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Romanian Deadlift</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×10 @85%</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Hip Thrust (bodyweight or light bar)</div><div class="lift-badge" style="background:var(--yellow-d);color:var(--yellow)">3×15 light</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Nordic Curl + Calf Raise + Tibialis + Clamshell</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">All 3×15</div></div><div class="lift-muscle">Full injury prevention. Legs must arrive at race day healthy.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 10 -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--teal)">Week 10</div>
+        <div class="wa-focus">Full Taper <span>— 2 sets only, activation work, stay sharp</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--teal-d);color:var(--teal)">2 sets only</div>
+          <div class="wa-tag" style="background:rgba(100,116,139,0.1);color:var(--muted)">Push + Legs only</div>
+        </div>
+        <div class="wachev">▼</div>
+      </div>
+      <div class="wa-body">
+        <div class="session-grid">
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--blue)">PUSH</div>
+            <div class="sc-sub">Monday · 2 sets · Activation only</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Bench Press</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">2×10 light</div></div><div class="lift-muscle">Just keeping the motor pattern alive. 70% of Week 8 weight.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">OHP + Lateral Raise</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">2×12 each</div></div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tricep Pushdown</div><div class="lift-badge" style="background:var(--teal-d);color:var(--teal)">2×15 light</div></div><div class="lift-muscle">Blood flow. Nothing more.</div></div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--muted)">PULL</div>
+            <div class="sc-sub">Wednesday · REST</div>
+            <div style="padding:20px 0;text-align:center;color:var(--muted);font-size:12px;">
+              <div style="font-size:28px;margin-bottom:8px;">😴</div>
+              No Pull session this week.<br>Full rest Wednesday.<br><br>
+              <div style="font-size:11px;color:var(--dim);">Race is 2 weeks away. Saving all energy for running.</div>
+            </div>
+          </div>
+          <div class="session-col">
+            <div class="sc-title" style="color:var(--green)">LEGS</div>
+            <div class="sc-sub">Friday · 2 sets only · Activation</div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Calf Raise + Glute Bridge + Clamshell</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">2×15 each</div></div><div class="lift-muscle">Activation circuit only. Keep calves and glutes awake for the race.</div></div>
+            <div class="lift"><div class="lift-top"><div class="lift-name">Tibialis Raise + Nordic Curl</div><div class="lift-badge" style="background:var(--green-d);color:var(--green)">2×15 / 2×5</div></div><div class="lift-muscle">These two never stop until after the race.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 11 -->
+    <div class="wa">
+      <div class="wa-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="wa-wk" style="color:var(--teal)">Week 11</div>
+        <div class="wa-focus">Race Week <span>— NO gym. Only running and rest.</span></div>
+        <div class="wa-tags">
+          <div class="wa-tag" style="background:var(--orange-d);color:var(--orange)">No gym at all</div>
+          <div class="wa-tag" style="background:var(--orange-d);color:var(--orange)">Race Sunday</div>
+        </div>
+        <div class="wachev">▼</div>
+      </div>
+      <div class="wa-body">
+        <div style="padding:24px 20px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px;">🏁</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--orange);letter-spacing:2px;margin-bottom:8px;">NO GYM THIS WEEK</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.8;max-width:500px;margin:0 auto;">
+            Zero gym sessions Mon–Sat. Your muscles are fully built. They now just need to recover and be sharp.<br><br>
+            <strong style="color:var(--bright);">Mon:</strong> Full rest + sleep 8+ hrs<br>
+            <strong style="color:var(--bright);">Tue:</strong> 5km easy run + strides<br>
+            <strong style="color:var(--bright);">Wed:</strong> 4km easy run<br>
+            <strong style="color:var(--bright);">Thu:</strong> Full rest + carb load<br>
+            <strong style="color:var(--bright);">Fri:</strong> 3km shakeout + strides<br>
+            <strong style="color:var(--bright);">Sat:</strong> Complete rest, bed 9:30pm<br>
+            <strong style="color:var(--orange);">Sun:</strong> RACE DAY — Sub 1:45 🟠
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PROGRESSION RULES -->
+  <div class="slabel">Progression System</div>
+  <div class="sh2">How to Progress Week to Week</div>
+  <p class="sdesc">The programme is useless without progressive overload. Follow this system exactly.</p>
   <div class="tips-grid">
-    <div class="tip"><div class="tip-ico">📈</div><div class="tip-t">Add reps first</div><div class="tip-d">If all reps feel easy, add 2 reps before adding weight. Hit top of range first.</div></div>
-    <div class="tip"><div class="tip-ico">🏋️</div><div class="tip-t">Then add weight</div><div class="tip-d">Add 2.5 kg upper body, 5 kg lower body when you comfortably max the rep range.</div></div>
-    <div class="tip"><div class="tip-ico">📝</div><div class="tip-t">Track every session</div><div class="tip-d">Write weights & reps every single time. You cannot progress what you don't track.</div></div>
-    <div class="tip"><div class="tip-ico">📉</div><div class="tip-t">Deload on cutback weeks</div><div class="tip-d">Weeks 3, 6, 10 — drop weight 10–15%. Your body gets stronger during recovery.</div></div>
-    <div class="tip"><div class="tip-ico">🚫</div><div class="tip-t">Don't ego lift before runs</div><div class="tip-d">Wed PULL before Tue run, Fri LEGS before Sat run — keep weights sensible or sore legs will ruin your run.</div></div>
-    <div class="tip"><div class="tip-ico">🍗</div><div class="tip-t">Protein every meal</div><div class="tip-d">293g protein/day at 69 kg = 4.2g/kg. You must hit this daily for bulk results. Non-negotiable.</div></div>
+    <div class="tip"><div class="tip-ico">📈</div><div class="tip-t">Add reps first</div><div class="tip-d">If all prescribed reps feel easy, add 2 reps before adding weight next session.</div></div>
+    <div class="tip"><div class="tip-ico">🏋️</div><div class="tip-t">Then add weight</div><div class="tip-d">2.5 kg upper body, 5 kg lower body when you comfortably hit the top rep range.</div></div>
+    <div class="tip"><div class="tip-ico">📝</div><div class="tip-t">Track everything</div><div class="tip-d">Write weight and reps in your phone after every set. Non-negotiable. You cannot progress what you don't track.</div></div>
+    <div class="tip"><div class="tip-ico">⏰</div><div class="tip-t">Rest times matter</div><div class="tip-d">Compounds: 90–120 sec. Supersets: 60 sec after each pair. Isolation: 60 sec. Drop sets: none.</div></div>
+    <div class="tip"><div class="tip-ico">🚫</div><div class="tip-t">Don't ego lift before runs</div><div class="tip-d">Wed Pull is the night before Thu run. Fri Legs is the night before Sat long run. Heavy legs = slow run.</div></div>
+    <div class="tip"><div class="tip-ico">🔄</div><div class="tip-t">Why exercises rotate</div><div class="tip-d">Same exercise every week = accommodation. Different angle/exercise = new stimulus = continued growth. Core lifts stay, accessories rotate.</div></div>
   </div>
 </div>
-
 <!-- ══════════════════════════════════ HALF MARATHON -->
 <div id="tab-halfmarathon" class="panel">
   <div style="padding-top:36px"></div>
