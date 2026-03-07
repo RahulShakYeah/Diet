@@ -505,6 +505,68 @@
   /* DIVIDER */
   .section-divider { border: none; border-top: 1px solid var(--border); margin: 0; }
 
+  /* TRACKER */
+  .trk-progress-wrap { background: var(--surface2); border: 1px solid var(--border); height: 10px; margin-bottom: 6px; overflow: hidden; }
+  .trk-progress-fill { height: 100%; background: linear-gradient(90deg,var(--orange),#ff3a00); transition: width .4s; }
+  .trk-week-row { display: grid; grid-template-columns: repeat(11,1fr); gap: 3px; margin-bottom: 24px; }
+  .trk-wbtn { background:var(--surface); border:1px solid var(--border); padding:10px 4px; text-align:center; cursor:pointer; transition:all .15s; user-select:none; }
+  .trk-wbtn:hover { border-color:var(--orange); }
+  .trk-wbtn.sel { border-color:var(--orange); background:var(--orange-dim); }
+  .trk-wbtn.wdone { background:rgba(22,163,74,.08); border-color:var(--green); }
+  .trk-wbtn .tw-n { font-size:11px; font-weight:800; color:var(--orange); }
+  .trk-wbtn.wdone .tw-n { color:var(--green); }
+  .trk-wbtn .tw-ic { font-size:12px; display:block; margin:2px 0; }
+  .trk-wbtn .tw-p { font-size:9px; color:var(--text3); }
+  .trk-tabs { display:flex; gap:2px; margin-bottom:20px; flex-wrap:wrap; }
+  .trk-tab { padding:9px 18px; font-size:11px; font-weight:700; border:1px solid var(--border); cursor:pointer; background:var(--surface2); color:var(--text2); transition:all .15s; user-select:none; letter-spacing:.06em; text-transform:uppercase; }
+  .trk-tab:hover { color:var(--text); }
+  .trk-tab.active { background:var(--orange); border-color:var(--orange); color:#fff; }
+  .trk-tab.tdone { background:rgba(22,163,74,.1); border-color:var(--green); color:var(--green); }
+  .trk-ex { border:1px solid var(--border); margin-bottom:8px; }
+  .trk-ex-head { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:11px 14px; background:var(--surface2); flex-wrap:wrap; }
+  .trk-ex-name { font-size:13px; font-weight:700; }
+  .trk-ex-meta { font-size:11px; color:var(--orange); font-weight:600; }
+  .trk-ex-body { padding:12px 14px; background:var(--surface); }
+  .trk-sets-hdr { display:grid; grid-template-columns:28px 1fr 1fr 1fr 24px; gap:6px; margin-bottom:6px; }
+  .trk-sets-hdr span { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text3); text-align:center; }
+  .trk-set-row { display:grid; grid-template-columns:28px 1fr 1fr 1fr 24px; gap:6px; align-items:center; margin-bottom:5px; }
+  .trk-set-num { font-size:12px; font-weight:700; color:var(--text3); text-align:center; }
+  .trk-input { background:var(--surface2); border:1px solid var(--border); padding:7px 6px; font-size:13px; font-weight:600; color:var(--text); text-align:center; width:100%; outline:none; transition:border-color .15s; font-family:inherit; }
+  .trk-input:focus { border-color:var(--orange); background:var(--surface); }
+  .trk-input::placeholder { color:var(--text3); font-weight:400; }
+  .trk-cb { width:18px; height:18px; cursor:pointer; accent-color:var(--orange); }
+  .trk-notes-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text3); margin:10px 0 4px; }
+  .trk-notes { width:100%; background:var(--surface2); border:1px solid var(--border); padding:8px 10px; font-size:12px; color:var(--text); resize:vertical; min-height:50px; font-family:inherit; outline:none; }
+  .trk-notes:focus { border-color:var(--orange); }
+  .trk-mark-btn { margin-top:14px; padding:10px 22px; background:var(--orange); border:none; color:#fff; font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:opacity .15s; font-family:inherit; }
+  .trk-mark-btn:hover { opacity:.88; }
+  .trk-mark-btn.undo { background:var(--surface2); border:1px solid var(--border); color:var(--text2); }
+  .trk-dash-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:3px; margin-bottom:24px; }
+  .trk-dash-card { background:var(--surface); border:1px solid var(--border); padding:18px 16px; }
+  .trk-dash-val { font-size:28px; font-weight:900; color:var(--orange); line-height:1; margin-bottom:4px; }
+  .trk-dash-label { font-size:10px; text-transform:uppercase; letter-spacing:.1em; color:var(--text3); font-weight:700; }
+  .trk-tbl { width:100%; border-collapse:collapse; margin-bottom:20px; font-size:12px; }
+  .trk-tbl th { background:var(--surface2); border:1px solid var(--border); padding:8px 10px; font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--text3); text-align:left; font-weight:700; }
+  .trk-tbl td { background:var(--surface); border:1px solid var(--border); padding:9px 10px; }
+  .trk-tbl tr:hover td { background:var(--surface2); }
+  .td-or { color:var(--orange); font-weight:700; }
+  .td-gr { color:var(--green); font-weight:700; }
+  .trk-chart-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-bottom:24px; }
+  .trk-chart-box { background:var(--surface); border:1px solid var(--border); padding:18px; }
+  .trk-chart-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text3); margin-bottom:12px; }
+  .trk-sync { background:var(--surface); border:1px solid var(--border); padding:20px; margin-bottom:16px; }
+  .trk-sync h4 { font-size:14px; font-weight:800; margin-bottom:6px; }
+  .trk-sync p { font-size:12px; color:var(--text2); margin-bottom:14px; line-height:1.7; }
+  .trk-btns { display:flex; gap:8px; flex-wrap:wrap; }
+  .trk-btn { padding:9px 16px; font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; border:1px solid var(--border); cursor:pointer; background:var(--surface2); color:var(--text2); transition:all .15s; font-family:inherit; }
+  .trk-btn:hover { border-color:var(--orange); color:var(--orange); }
+  .trk-btn.primary { background:var(--orange); border-color:var(--orange); color:#fff; }
+  .trk-btn.primary:hover { opacity:.88; }
+  .trk-btn.grn { background:rgba(22,163,74,.1); border-color:var(--green); color:var(--green); }
+  .trk-status { font-size:11px; color:var(--text3); margin-top:8px; min-height:16px; }
+  .trk-empty { padding:28px; text-align:center; color:var(--text3); font-size:13px; border:1px dashed var(--border); }
+  #importFile { display:none; }
+
   @media (max-width: 900px) {
     .sidebar { transform: translateX(-100%); }
     .sidebar.open { transform: translateX(0); }
@@ -556,6 +618,10 @@
     <div class="sidebar-section-label">Race</div>
     <a class="nav-link" href="#race" onclick="closeSidebar()">
       <span class="nav-link-icon">🏁</span> Race Day
+    </a>
+    <div class="sidebar-section-label">Progress</div>
+    <a class="nav-link" href="#tracker" onclick="closeSidebar()">
+      <span class="nav-link-icon">📈</span> Workout Tracker
     </a>
   </nav>
 
@@ -1928,67 +1994,834 @@
   </div>
 </section>
 
+<hr class="section-divider">
+
+<!-- ══════════════════════════════════════
+     WORKOUT TRACKER
+══════════════════════════════════════ -->
+<section id="tracker">
+  <div class="section-header">
+    <div class="section-tag">11-Week PPL Tracker</div>
+    <div class="section-title">Log · Track · Dominate</div>
+    <div class="section-desc">Log every set, weight and rep. Track top sets and progress across all 11 weeks.</div>
+  </div>
+
+  <!-- SYNC PANEL -->
+  <div class="trk-sync">
+    <h4>📲 Cross-Device Sync</h4>
+    <p>Export your data as a JSON file and import it on any device — phone, tablet, laptop. Your progress travels with you. Export after every session.</p>
+    <div class="trk-btns">
+      <button class="trk-btn primary" onclick="exportData()">⬇ Export Data</button>
+      <button class="trk-btn grn" onclick="document.getElementById('importFile').click()">⬆ Import Data</button>
+      <button class="trk-btn" onclick="if(confirm('Reset ALL tracking data?')) { localStorage.removeItem('rbd_tracker'); location.reload(); }">🗑 Reset</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+    <div class="trk-status" id="syncStatus"></div>
+  </div>
+
+  <!-- OVERALL PROGRESS -->
+  <div class="trk-dash-grid" id="dashCards"></div>
+  <div class="trk-progress-wrap"><div class="trk-progress-fill" id="overallBar" style="width:0%"></div></div>
+  <div style="font-size:11px;color:var(--text3);margin-bottom:24px" id="overallLabel">0 / 33 sessions completed</div>
+
+  <!-- WEEK SELECTOR -->
+  <div class="trk-week-row" id="weekRow"></div>
+
+  <!-- SESSION TABS -->
+  <div class="trk-tabs">
+    <div class="trk-tab active" id="tabPush" onclick="switchSession('push')">🏋️ Push — Sun</div>
+    <div class="trk-tab" id="tabPull" onclick="switchSession('pull')">💪 Pull — Tue</div>
+    <div class="trk-tab" id="tabLegs" onclick="switchSession('legs')">🦵 Legs — Thu</div>
+  </div>
+
+  <!-- EXERCISE LOG -->
+  <div id="exerciseLog"></div>
+
+  <!-- MARK COMPLETE -->
+  <div style="margin-bottom:32px">
+    <button class="trk-mark-btn" id="markBtn" onclick="markSessionDone()">✓ Mark Session Complete</button>
+  </div>
+
+  <!-- DASHBOARD: CHARTS + TOP SETS -->
+  <div style="margin-top:40px">
+    <div class="section-tag" style="margin-bottom:16px">Dashboard</div>
+
+    <!-- CHARTS -->
+    <div class="trk-chart-grid">
+      <div class="trk-chart-box">
+        <div class="trk-chart-title">📈 Bench Press — Top Set Weight (kg)</div>
+        <canvas id="chartBench" height="180"></canvas>
+      </div>
+      <div class="trk-chart-box">
+        <div class="trk-chart-title">📈 Barbell Row — Top Set Weight (kg)</div>
+        <canvas id="chartRow" height="180"></canvas>
+      </div>
+      <div class="trk-chart-box">
+        <div class="trk-chart-title">📈 Back Squat / Goblet Squat — Weight (kg)</div>
+        <canvas id="chartSquat" height="180"></canvas>
+      </div>
+      <div class="trk-chart-box">
+        <div class="trk-chart-title">📊 Sessions Completed Per Week</div>
+        <canvas id="chartSessions" height="180"></canvas>
+      </div>
+    </div>
+
+    <!-- TOP SETS TABLE -->
+    <div class="section-tag" style="margin-bottom:12px">Top Sets — Personal Bests</div>
+    <div id="topSetsTable"></div>
+
+    <!-- RECENT NOTES -->
+    <div class="section-tag" style="margin-top:24px;margin-bottom:12px">Session Notes</div>
+    <div id="notesLog"></div>
+  </div>
+</section>
+
 </div><!-- end .main-content -->
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
+/* ═══════════════════════════════════
+   ACCORDION & UI HELPERS
+═══════════════════════════════════ */
 function toggleAcc(header) {
   const body = header.nextElementSibling;
   const chevron = header.querySelector('.week-chevron');
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  chevron.classList.toggle('open', !isOpen);
-  header.classList.toggle('open', !isOpen);
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  chevron.classList.toggle('open', !open);
+  header.classList.toggle('open', !open);
 }
-
 function toggleMeal(header) {
   const body = header.nextElementSibling;
   const chevron = header.querySelector('.week-chevron');
-  const isOpen = body.classList.contains('open');
-  body.classList.toggle('open', !isOpen);
-  chevron.classList.toggle('open', !isOpen);
-  header.classList.toggle('open', !isOpen);
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  chevron.classList.toggle('open', !open);
+  header.classList.toggle('open', !open);
 }
-
-// Sidebar
 function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('sidebarOverlay');
-  sidebar.classList.toggle('open');
-  overlay.classList.toggle('visible');
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('visible');
 }
 function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('visible');
 }
+function toggleTheme(cb) {
+  document.body.classList.toggle('dark', cb.checked);
+  localStorage.setItem('theme', cb.checked ? 'dark' : 'light');
+  renderCharts();
+}
+(function(){
+  const s = localStorage.getItem('theme');
+  if (s === 'dark') { document.body.classList.add('dark'); const t = document.getElementById('darkToggle'); if(t) t.checked=true; }
+})();
+const sections = document.querySelectorAll('section[id]');
+const navLinks  = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) cur = s.id; });
+  navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+cur));
+});
 
-// Theme
-function toggleTheme(checkbox) {
-  document.body.classList.toggle('dark', checkbox.checked);
-  localStorage.setItem('theme', checkbox.checked ? 'dark' : 'light');
+/* ═══════════════════════════════════
+   PPL PLAN DATA — 11 WEEKS
+═══════════════════════════════════ */
+const PLAN = [
+  { label:'W1', theme:'Foundation',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'3×10',sets:3},
+      {name:'Dumbbell Shoulder Press',prescribed:'3×12',sets:3},
+      {name:'Incline DB Press',prescribed:'3×12',sets:3},
+      {name:'Lateral Raise',prescribed:'3×15',sets:3},
+      {name:'Tricep Pushdown (rope)',prescribed:'3×15',sets:3},
+      {name:'Push-Ups',prescribed:'3×12',sets:3}
+    ]},
+    pull:{ day:'Tue', exercises:[
+      {name:'Barbell Bent-Over Row',prescribed:'3×10',sets:3},
+      {name:'Lat Pulldown (wide grip)',prescribed:'3×12',sets:3},
+      {name:'Face Pull',prescribed:'3×15',sets:3},
+      {name:'Seated Cable Row',prescribed:'3×12',sets:3},
+      {name:'DB Bicep Curl',prescribed:'3×12',sets:3},
+      {name:'Hammer Curl',prescribed:'3×12',sets:3}
+    ]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Goblet Squat',prescribed:'3×12',sets:3},
+      {name:'Romanian Deadlift',prescribed:'3×10',sets:3},
+      {name:'Hip Thrust (bodyweight)',prescribed:'3×15',sets:3},
+      {name:'Walking Lunges',prescribed:'3×10ea',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×15ea',sets:3},
+      {name:'Tibialis Raise',prescribed:'3×20',sets:3},
+      {name:'Nordic Curl',prescribed:'3×5',sets:3}
+    ]}
+  },
+  { label:'W2', theme:'Volume Up',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'3×10',sets:3},
+      {name:'Overhead Press (BB)',prescribed:'3×10',sets:3},
+      {name:'Cable Chest Fly (low-to-high)',prescribed:'3×15',sets:3},
+      {name:'Rear Delt Fly',prescribed:'3×15',sets:3},
+      {name:'Skull Crusher (EZ bar)',prescribed:'3×12',sets:3},
+      {name:'Chest Dip',prescribed:'3×10',sets:3}
+    ]},
+    pull:{ day:'Tue', exercises:[
+      {name:'Barbell Bent-Over Row',prescribed:'3×10',sets:3},
+      {name:'Pull-Up / Assisted',prescribed:'3×6-8',sets:3},
+      {name:'Face Pull',prescribed:'3×15',sets:3},
+      {name:'Single-Arm DB Row',prescribed:'3×10ea',sets:3},
+      {name:'Incline DB Curl',prescribed:'3×10',sets:3},
+      {name:'Hammer Curl',prescribed:'3×12',sets:3}
+    ]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Goblet Squat',prescribed:'3×12',sets:3},
+      {name:'Romanian Deadlift',prescribed:'3×10',sets:3},
+      {name:'Bulgarian Split Squat',prescribed:'3×8ea',sets:3},
+      {name:'Leg Curl (machine)',prescribed:'3×12',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×15ea',sets:3},
+      {name:'Tibialis Raise',prescribed:'3×20',sets:3},
+      {name:'Nordic Curl',prescribed:'3×5',sets:3}
+    ]}
+  },
+  { label:'W3', theme:'Deload',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'3×10 @85%',sets:3},
+      {name:'DB Shoulder Press',prescribed:'3×12 @85%',sets:3},
+      {name:'Pec Deck / Machine Fly',prescribed:'3×15',sets:3},
+      {name:'Cable Lateral Raise',prescribed:'3×20',sets:3},
+      {name:'Tricep Overhead Extension',prescribed:'3×12',sets:3}
+    ]},
+    pull:{ day:'Tue — REST', exercises:[]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Goblet Squat',prescribed:'3×12 @85%',sets:3},
+      {name:'Romanian Deadlift',prescribed:'3×10 @85%',sets:3},
+      {name:'Single-Leg Glute Bridge',prescribed:'3×15ea',sets:3},
+      {name:'Side-Lying Clamshell',prescribed:'3×20ea',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×20ea',sets:3},
+      {name:'Tibialis Raise',prescribed:'3×25',sets:3},
+      {name:'Nordic Curl',prescribed:'3×5',sets:3}
+    ]}
+  },
+  { label:'W4', theme:'Hypertrophy',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'4×8',sets:4},
+      {name:'Overhead Press (BB)',prescribed:'4×8',sets:4},
+      {name:'Dips (weighted)',prescribed:'4×10',sets:4},
+      {name:'Cable Lateral Raise',prescribed:'4×15',sets:4},
+      {name:'Skull Crusher → Close Grip Press',prescribed:'3×10+max',sets:3}
+    ]},
+    pull:{ day:'Tue', exercises:[
+      {name:'Barbell Row (overhand)',prescribed:'4×8',sets:4},
+      {name:'Weighted Pull-Up',prescribed:'4×6',sets:4},
+      {name:'Face Pull',prescribed:'3×15',sets:3},
+      {name:'Chest-Supported Row',prescribed:'4×10',sets:4},
+      {name:'EZ Bar Curl',prescribed:'4×10',sets:4},
+      {name:'Cross-Body Hammer Curl',prescribed:'3×12',sets:3}
+    ]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Barbell Back Squat',prescribed:'4×8',sets:4},
+      {name:'Romanian Deadlift',prescribed:'4×10',sets:4},
+      {name:'Barbell Hip Thrust',prescribed:'4×12',sets:4},
+      {name:'Bulgarian Split Squat',prescribed:'3×10ea',sets:3},
+      {name:'Leg Press (high foot)',prescribed:'3×12',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×15ea',sets:3},
+      {name:'Nordic Curl',prescribed:'3×6',sets:3}
+    ]}
+  },
+  { label:'W5', theme:'Peak Volume',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'4×8',sets:4},
+      {name:'Standing OHP',prescribed:'4×8',sets:4},
+      {name:'Low-to-High Cable Fly',prescribed:'4×12',sets:4},
+      {name:'DB Front Raise',prescribed:'3×12',sets:3},
+      {name:'Tricep Pushdown → OH Ext',prescribed:'3×12+10',sets:3}
+    ]},
+    pull:{ day:'Tue', exercises:[
+      {name:'Barbell Row (underhand)',prescribed:'4×8',sets:4},
+      {name:'Neutral Grip Pull-Up',prescribed:'4×8',sets:4},
+      {name:'Face Pull',prescribed:'3×15',sets:3},
+      {name:'Lat Pulldown (close grip)',prescribed:'4×10',sets:4},
+      {name:'Concentration Curl',prescribed:'4×10',sets:4},
+      {name:'Reverse Curl (EZ bar)',prescribed:'3×12',sets:3}
+    ]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Front Squat / Hack Squat',prescribed:'4×8',sets:4},
+      {name:'Romanian Deadlift',prescribed:'4×10',sets:4},
+      {name:'Barbell Hip Thrust',prescribed:'4×12',sets:4},
+      {name:'Nordic Hamstring Curl',prescribed:'3×6',sets:3},
+      {name:'Step-Up (weighted)',prescribed:'3×12ea',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×15ea',sets:3},
+      {name:'Lateral Band Walk',prescribed:'3×20ea',sets:3}
+    ]}
+  },
+  { label:'W6', theme:'Deload',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'3×10 @90%',sets:3},
+      {name:'DB Shoulder Press',prescribed:'3×12',sets:3},
+      {name:'Cable Fly',prescribed:'3×15',sets:3},
+      {name:'Tricep Pushdown',prescribed:'3×15',sets:3}
+    ]},
+    pull:{ day:'Tue — REST', exercises:[]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Goblet Squat (light)',prescribed:'3×12',sets:3},
+      {name:'Romanian Deadlift',prescribed:'3×10 @90%',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×15ea',sets:3},
+      {name:'Tibialis Raise',prescribed:'3×20',sets:3},
+      {name:'Nordic Curl',prescribed:'3×5',sets:3},
+      {name:'Clamshell (band)',prescribed:'3×15ea',sets:3}
+    ]}
+  },
+  { label:'W7', theme:'Speed Buffer',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'4×8 PB',sets:4},
+      {name:'Arnold Press',prescribed:'4×10',sets:4},
+      {name:'Incline DB Press (60°)',prescribed:'4×8',sets:4},
+      {name:'Lateral Raise 21s',prescribed:'3×21',sets:3},
+      {name:'Dips (heavy)',prescribed:'4×10',sets:4}
+    ]},
+    pull:{ day:'Tue', exercises:[
+      {name:'Barbell Row',prescribed:'4×8 PB',sets:4},
+      {name:'Cable Row (wide grip)',prescribed:'4×10',sets:4},
+      {name:'Face Pull',prescribed:'3×15',sets:3},
+      {name:'Straight-Arm Pulldown',prescribed:'4×12',sets:4},
+      {name:'Spider Curl',prescribed:'4×10',sets:4},
+      {name:'Wrist Curl + Reverse',prescribed:'2×15ea',sets:2}
+    ]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Barbell Back Squat',prescribed:'4×8 PB',sets:4},
+      {name:'Romanian Deadlift',prescribed:'4×8',sets:4},
+      {name:'Barbell Hip Thrust (max)',prescribed:'4×10',sets:4},
+      {name:'Nordic Hamstring Curl',prescribed:'3×6',sets:3},
+      {name:'Leg Extension (machine)',prescribed:'3×15',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×15ea',sets:3},
+      {name:'Clamshell (band)',prescribed:'3×15ea',sets:3}
+    ]}
+  },
+  { label:'W8', theme:'Absolute Peak',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'4×6 + DROP (5RM)',sets:4},
+      {name:'OHP (heavy)',prescribed:'4×6',sets:4},
+      {name:'Weighted Dips',prescribed:'4×10',sets:4},
+      {name:'Lateral Raise + Drop',prescribed:'4×12+DROP',sets:4},
+      {name:'Tricep Giant Set',prescribed:'3×(10+10+10)',sets:3}
+    ]},
+    pull:{ day:'Tue', exercises:[
+      {name:'Barbell Row (heavy)',prescribed:'4×6 + DROP',sets:4},
+      {name:'Weighted Pull-Up (heavy)',prescribed:'4×6',sets:4},
+      {name:'Face Pull',prescribed:'3×15',sets:3},
+      {name:'Meadows Row',prescribed:'4×8ea',sets:4},
+      {name:'21s Bicep Curl',prescribed:'3×21',sets:3},
+      {name:'Hammer + Reverse Curl',prescribed:'3×10+10',sets:3}
+    ]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Barbell Back Squat (heavy)',prescribed:'4×6 + DROP (6RM)',sets:4},
+      {name:'Romanian Deadlift (heavy)',prescribed:'4×8',sets:4},
+      {name:'Barbell Hip Thrust (max)',prescribed:'4×10',sets:4},
+      {name:'Nordic Hamstring Curl',prescribed:'3×8',sets:3},
+      {name:'Leg Press → Squat DROP',prescribed:'3×15+BW',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×15ea',sets:3},
+      {name:'Tibialis Raise',prescribed:'3×20',sets:3}
+    ]}
+  },
+  { label:'W9', theme:'Taper Begins',
+    push:{ day:'Sun', exercises:[
+      {name:'Barbell Bench Press',prescribed:'3×8 @85%',sets:3},
+      {name:'OHP',prescribed:'3×8 @85%',sets:3},
+      {name:'DB Incline Press + Lateral Raise',prescribed:'3×10 superset',sets:3},
+      {name:'Tricep Pushdown',prescribed:'3×12',sets:3}
+    ]},
+    pull:{ day:'Tue', exercises:[
+      {name:'Barbell Row',prescribed:'3×8 @85%',sets:3},
+      {name:'Lat Pulldown',prescribed:'3×10',sets:3},
+      {name:'Face Pull',prescribed:'3×15',sets:3},
+      {name:'DB Curl + Hammer Curl',prescribed:'3×10 each',sets:3}
+    ]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Goblet Squat (light)',prescribed:'3×12',sets:3},
+      {name:'Romanian Deadlift',prescribed:'3×10 @85%',sets:3},
+      {name:'Hip Thrust (light)',prescribed:'3×15',sets:3},
+      {name:'Nordic Curl',prescribed:'3×5',sets:3},
+      {name:'Single-Leg Calf Raise',prescribed:'3×15ea',sets:3}
+    ]}
+  },
+  { label:'W10', theme:'Full Taper',
+    push:{ day:'Sun', exercises:[
+      {name:'Bench Press (light)',prescribed:'2×10',sets:2},
+      {name:'OHP + Lateral Raise',prescribed:'2×12',sets:2},
+      {name:'Tricep Pushdown',prescribed:'2×15',sets:2}
+    ]},
+    pull:{ day:'Tue — REST', exercises:[]},
+    legs:{ day:'Thu', exercises:[
+      {name:'Calf Raise',prescribed:'2×15',sets:2},
+      {name:'Glute Bridge',prescribed:'2×15',sets:2},
+      {name:'Clamshell',prescribed:'2×15',sets:2},
+      {name:'Tibialis Raise',prescribed:'2×15',sets:2},
+      {name:'Nordic Curl',prescribed:'2×5',sets:2}
+    ]}
+  },
+  { label:'W11', theme:'Race Week',
+    push:{ day:'No gym this week', exercises:[]},
+    pull:{ day:'No gym this week', exercises:[]},
+    legs:{ day:'No gym this week', exercises:[]}
+  }
+];
+
+/* ═══════════════════════════════════
+   DATA STORE
+═══════════════════════════════════ */
+const STORE_KEY = 'rbd_tracker_v2';
+let DB = {};
+
+function loadDB() {
+  try { DB = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+  catch(e) { DB = {}; }
+}
+function saveDB() {
+  localStorage.setItem(STORE_KEY, JSON.stringify(DB));
+}
+function sessionKey(w, s) { return `w${w}_${s}`; }
+function getSession(w, s) {
+  const k = sessionKey(w,s);
+  if (!DB[k]) DB[k] = { done: false, exercises: {}, notes: '' };
+  return DB[k];
 }
 
-// Restore saved theme
-(function() {
-  const saved = localStorage.getItem('theme');
-  if (saved === 'dark') {
-    document.body.classList.add('dark');
-    const toggle = document.getElementById('darkToggle');
-    if (toggle) toggle.checked = true;
-  }
-})();
+/* ═══════════════════════════════════
+   STATE
+═══════════════════════════════════ */
+let curWeek = 0;   // 0-indexed
+let curSess = 'push';
 
-// Nav highlighting
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav-link');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+/* ═══════════════════════════════════
+   TRACKER RENDER
+═══════════════════════════════════ */
+function initTracker() {
+  loadDB();
+  renderWeekRow();
+  renderSessionTabs();
+  renderExerciseLog();
+  renderDashboard();
+}
+
+function renderWeekRow() {
+  const el = document.getElementById('weekRow');
+  if (!el) return;
+  let html = '';
+  PLAN.forEach((w, i) => {
+    const sessions = ['push','pull','legs'];
+    const doneCount = sessions.filter(s => getSession(i,s).done).length;
+    const allDone = doneCount === 3;
+    html += `<div class="trk-wbtn${i===curWeek?' sel':''}${allDone?' wdone':''}" onclick="selectWeek(${i})">
+      <div class="tw-n">${w.label}</div>
+      <div class="tw-ic">${allDone?'✅':doneCount>0?'🔥':'○'}</div>
+      <div class="tw-p">${doneCount}/3</div>
+    </div>`;
   });
-  navLinks.forEach(l => {
-    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+  el.innerHTML = html;
+
+  // overall progress
+  const total = PLAN.length * 3;
+  let completed = 0;
+  PLAN.forEach((w,i) => ['push','pull','legs'].forEach(s => { if(getSession(i,s).done) completed++; }));
+  const pct = Math.round(completed/total*100);
+  const bar = document.getElementById('overallBar');
+  if (bar) bar.style.width = pct + '%';
+  const lbl = document.getElementById('overallLabel');
+  if (lbl) lbl.textContent = `${completed} / ${total} sessions completed (${pct}%)`;
+}
+
+function renderDashCards() {
+  const el = document.getElementById('dashCards');
+  if (!el) return;
+  let totalSess = 0, totalEx = 0, totalSets = 0, weeks = new Set();
+  PLAN.forEach((w,i) => ['push','pull','legs'].forEach(s => {
+    const sess = getSession(i,s);
+    if (sess.done) { totalSess++; weeks.add(i); }
+    Object.values(sess.exercises||{}).forEach(ex => {
+      (ex.sets||[]).forEach(set => {
+        if (set.reps) { totalEx++; if(parseFloat(set.weight)) totalSets++; }
+      });
+    });
+  }));
+  el.innerHTML = `
+    <div class="trk-dash-card"><div class="trk-dash-val">${totalSess}</div><div class="trk-dash-label">Sessions Done</div></div>
+    <div class="trk-dash-card"><div class="trk-dash-val">${weeks.size}</div><div class="trk-dash-label">Weeks Started</div></div>
+    <div class="trk-dash-card"><div class="trk-dash-val">${totalEx}</div><div class="trk-dash-label">Sets Logged</div></div>
+    <div class="trk-dash-card"><div class="trk-dash-val">${totalSets}</div><div class="trk-dash-label">Weighted Sets</div></div>
+  `;
+}
+
+function renderSessionTabs() {
+  ['push','pull','legs'].forEach(s => {
+    const tab = document.getElementById('tab'+s.charAt(0).toUpperCase()+s.slice(1));
+    if (!tab) return;
+    const sess = getSession(curWeek, s);
+    tab.className = 'trk-tab' + (s===curSess?' active':'') + (sess.done?' tdone':'');
   });
-});
+}
+
+function renderExerciseLog() {
+  const el = document.getElementById('exerciseLog');
+  if (!el) return;
+  const week = PLAN[curWeek];
+  const sessData = week[curSess];
+  const saved = getSession(curWeek, curSess);
+
+  if (!sessData || sessData.exercises.length === 0) {
+    el.innerHTML = `<div class="trk-empty">😴 Rest day — no exercises for this session this week.</div>`;
+    const btn = document.getElementById('markBtn');
+    if (btn) { btn.textContent = saved.done ? '✓ Marked Complete' : '✓ Mark Session Complete'; btn.className = 'trk-mark-btn' + (saved.done?' undo':''); }
+    return;
+  }
+
+  let html = '';
+  sessData.exercises.forEach((ex, ei) => {
+    const exSaved = saved.exercises[ei] || { sets: [] };
+    html += `<div class="trk-ex">
+      <div class="trk-ex-head">
+        <span class="trk-ex-name">${ex.name}</span>
+        <span class="trk-ex-meta">${ex.prescribed}</span>
+      </div>
+      <div class="trk-ex-body">
+        <div class="trk-sets-hdr"><span>#</span><span>Weight (kg)</span><span>Reps</span><span>RPE</span><span>✓</span></div>`;
+    for (let si = 0; si < ex.sets; si++) {
+      const s = exSaved.sets[si] || {};
+      html += `<div class="trk-set-row">
+        <div class="trk-set-num">${si+1}</div>
+        <input class="trk-input" type="number" min="0" step="0.5" placeholder="kg"
+          value="${s.weight||''}" onchange="saveSet(${ei},${si},'weight',this.value)">
+        <input class="trk-input" type="number" min="0" placeholder="reps"
+          value="${s.reps||''}" onchange="saveSet(${ei},${si},'reps',this.value)">
+        <input class="trk-input" type="number" min="1" max="10" step="0.5" placeholder="RPE"
+          value="${s.rpe||''}" onchange="saveSet(${ei},${si},'rpe',this.value)">
+        <input class="trk-cb" type="checkbox" ${s.done?'checked':''} onchange="saveSet(${ei},${si},'done',this.checked)">
+      </div>`;
+    }
+    const noteVal = exSaved.note || '';
+    html += `
+        <div class="trk-notes-label">Notes</div>
+        <textarea class="trk-notes" rows="2" placeholder="Cues, how it felt, form notes…"
+          onchange="saveNote(${ei}, this.value)">${noteVal}</textarea>
+      </div>
+    </div>`;
+  });
+
+  // session notes
+  html += `<div style="margin-top:16px">
+    <div class="trk-notes-label">Session Notes</div>
+    <textarea class="trk-notes" rows="3" placeholder="How did the session feel overall? Energy, sleep, PRs…"
+      onchange="saveSessionNote(this.value)">${saved.notes||''}</textarea>
+  </div>`;
+
+  el.innerHTML = html;
+  const btn = document.getElementById('markBtn');
+  if (btn) { btn.textContent = saved.done ? '↩ Unmark Session' : '✓ Mark Session Complete'; btn.className = 'trk-mark-btn'+(saved.done?' undo':''); }
+}
+
+function saveSet(ei, si, field, val) {
+  const sess = getSession(curWeek, curSess);
+  if (!sess.exercises[ei]) sess.exercises[ei] = { sets: [], note: '' };
+  if (!sess.exercises[ei].sets[si]) sess.exercises[ei].sets[si] = {};
+  sess.exercises[ei].sets[si][field] = field==='done' ? val : (field==='weight'||field==='reps'||field==='rpe' ? parseFloat(val)||'' : val);
+  saveDB();
+  renderDashboard();
+}
+function saveNote(ei, val) {
+  const sess = getSession(curWeek, curSess);
+  if (!sess.exercises[ei]) sess.exercises[ei] = { sets: [], note: '' };
+  sess.exercises[ei].note = val;
+  saveDB();
+}
+function saveSessionNote(val) {
+  const sess = getSession(curWeek, curSess);
+  sess.notes = val;
+  saveDB();
+}
+
+function markSessionDone() {
+  const sess = getSession(curWeek, curSess);
+  sess.done = !sess.done;
+  saveDB();
+  renderWeekRow();
+  renderSessionTabs();
+  renderExerciseLog();
+  renderDashboard();
+}
+
+function selectWeek(i) {
+  curWeek = i;
+  renderWeekRow();
+  renderSessionTabs();
+  renderExerciseLog();
+}
+function switchSession(s) {
+  curSess = s;
+  renderSessionTabs();
+  renderExerciseLog();
+}
+
+/* ═══════════════════════════════════
+   DASHBOARD — Top Sets + Notes
+═══════════════════════════════════ */
+function renderDashboard() {
+  renderDashCards();
+  renderTopSets();
+  renderNotesLog();
+  renderCharts();
+}
+
+function getTopSet(exerciseName) {
+  // returns { week, session, weight, reps, rpe } for best weight across all weeks
+  let best = null;
+  PLAN.forEach((w,wi) => {
+    ['push','pull','legs'].forEach(s => {
+      const sess = getSession(wi,s);
+      const exList = w[s].exercises;
+      exList.forEach((ex,ei) => {
+        if (ex.name.toLowerCase().includes(exerciseName.toLowerCase()) || exerciseName.toLowerCase().includes(ex.name.toLowerCase().split(' ')[0])) {
+          const exSaved = sess.exercises[ei];
+          if (!exSaved) return;
+          exSaved.sets.forEach(set => {
+            if (set && set.weight && (!best || parseFloat(set.weight) > parseFloat(best.weight))) {
+              best = { week: w.label, session: s, weight: set.weight, reps: set.reps, rpe: set.rpe, exName: ex.name };
+            }
+          });
+        }
+      });
+    });
+  });
+  return best;
+}
+
+function getAllSetsForExercise(matchName) {
+  // returns array of { weekIdx, weight } for charting
+  const data = [];
+  PLAN.forEach((w,wi) => {
+    ['push','pull','legs'].forEach(s => {
+      const sess = getSession(wi,s);
+      const exList = w[s].exercises;
+      exList.forEach((ex,ei) => {
+        if (!ex.name.toLowerCase().includes(matchName)) return;
+        const exSaved = sess.exercises[ei];
+        if (!exSaved) return;
+        let topW = 0;
+        exSaved.sets.forEach(set => { if(set&&set.weight&&parseFloat(set.weight)>topW) topW=parseFloat(set.weight); });
+        if (topW > 0) data.push({ weekIdx: wi, weight: topW, label: w.label });
+      });
+    });
+  });
+  return data;
+}
+
+function renderTopSets() {
+  const el = document.getElementById('topSetsTable');
+  if (!el) return;
+
+  // Collect all exercises logged across all weeks
+  const exerciseMap = {}; // name -> best set info
+  PLAN.forEach((w,wi) => {
+    ['push','pull','legs'].forEach(s => {
+      const sess = getSession(wi,s);
+      w[s].exercises.forEach((ex,ei) => {
+        const exSaved = sess.exercises[ei];
+        if (!exSaved) return;
+        exSaved.sets.forEach(set => {
+          if (!set || !set.weight) return;
+          const kg = parseFloat(set.weight);
+          if (!exerciseMap[ex.name] || kg > exerciseMap[ex.name].weight) {
+            exerciseMap[ex.name] = { weight: kg, reps: set.reps||'—', rpe: set.rpe||'—', week: w.label, session: s.toUpperCase(), note: exSaved.note||'' };
+          }
+        });
+      });
+    });
+  });
+
+  const entries = Object.entries(exerciseMap).sort((a,b) => b[1].weight - a[1].weight);
+  if (!entries.length) {
+    el.innerHTML = `<div class="trk-empty">No weighted sets logged yet. Start logging to see your top sets here.</div>`;
+    return;
+  }
+
+  let html = `<table class="trk-tbl">
+    <thead><tr>
+      <th>Exercise</th><th>Top Weight</th><th>Reps</th><th>RPE</th><th>Week</th><th>Session</th><th>Note</th>
+    </tr></thead><tbody>`;
+  entries.forEach(([name, d]) => {
+    html += `<tr>
+      <td style="font-weight:600">${name}</td>
+      <td class="td-or">${d.weight} kg</td>
+      <td>${d.reps}</td>
+      <td>${d.rpe}</td>
+      <td class="td-gr">${d.week}</td>
+      <td>${d.session}</td>
+      <td style="color:var(--text2);font-size:11px;max-width:200px">${d.note}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+function renderNotesLog() {
+  const el = document.getElementById('notesLog');
+  if (!el) return;
+  let notes = [];
+  PLAN.forEach((w,wi) => {
+    ['push','pull','legs'].forEach(s => {
+      const sess = getSession(wi,s);
+      if (sess.notes && sess.notes.trim()) {
+        notes.push({ week: w.label, theme: w.theme, session: s.toUpperCase(), text: sess.notes });
+      }
+    });
+  });
+  if (!notes.length) {
+    el.innerHTML = `<div class="trk-empty">No session notes yet. Add notes after each session to track how things felt.</div>`;
+    return;
+  }
+  let html = `<table class="trk-tbl"><thead><tr><th>Week</th><th>Theme</th><th>Session</th><th>Notes</th></tr></thead><tbody>`;
+  notes.forEach(n => {
+    html += `<tr><td class="td-or">${n.week}</td><td>${n.theme}</td><td style="color:var(--blue);font-weight:700">${n.session}</td><td style="font-size:12px;color:var(--text2)">${n.text}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+/* ═══════════════════════════════════
+   CHARTS
+═══════════════════════════════════ */
+const charts = {};
+
+function chartColors() {
+  const dark = document.body.classList.contains('dark');
+  return {
+    grid: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+    text: dark ? '#888' : '#999',
+    orange: '#ff6b2b',
+    orangeFill: dark ? 'rgba(255,107,43,0.15)' : 'rgba(232,90,26,0.1)',
+    green: dark ? '#22c55e' : '#16a34a',
+    blue: dark ? '#3b82f6' : '#2563eb',
+  };
+}
+
+function buildLineChart(id, label, data, color) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const c = chartColors();
+  if (charts[id]) charts[id].destroy();
+  if (!data.length) {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = c.text;
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('No data yet — start logging weights', canvas.width/2, 90);
+    return;
+  }
+  charts[id] = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.map(d => d.label),
+      datasets: [{ label, data: data.map(d => d.weight),
+        borderColor: color, backgroundColor: c.orangeFill,
+        borderWidth: 2.5, pointRadius: 5, pointHoverRadius: 7,
+        tension: 0.3, fill: true
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: false }, tooltip: { callbacks: {
+        label: ctx => ` ${ctx.parsed.y} kg`
+      }}},
+      scales: {
+        x: { grid: { color: c.grid }, ticks: { color: c.text, font: { size: 10 } } },
+        y: { grid: { color: c.grid }, ticks: { color: c.text, font: { size: 10 }, callback: v => v+'kg' }, beginAtZero: false }
+      }
+    }
+  });
+}
+
+function renderCharts() {
+  const c = chartColors();
+
+  // Bench
+  const benchData = getAllSetsForExercise('bench press');
+  buildLineChart('chartBench', 'Bench Press Top Set', benchData, c.orange);
+
+  // Row
+  const rowData = getAllSetsForExercise('row');
+  buildLineChart('chartRow', 'Row Top Set', rowData, c.blue);
+
+  // Squat
+  const squatData = getAllSetsForExercise('squat');
+  buildLineChart('chartSquat', 'Squat Top Set', squatData, c.green);
+
+  // Sessions per week bar chart
+  const canvas = document.getElementById('chartSessions');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (charts.chartSessions) charts.chartSessions.destroy();
+  const weekLabels = PLAN.map(w => w.label);
+  const sessData = PLAN.map((w,i) => ['push','pull','legs'].filter(s => getSession(i,s).done).length);
+  charts.chartSessions = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: weekLabels,
+      datasets: [{
+        label: 'Sessions',
+        data: sessData,
+        backgroundColor: sessData.map(v => v===3 ? 'rgba(22,163,74,0.6)' : v>0 ? 'rgba(232,90,26,0.6)' : 'rgba(150,150,150,0.2)'),
+        borderColor: sessData.map(v => v===3 ? '#16a34a' : v>0 ? '#e85a1a' : 'rgba(150,150,150,0.3)'),
+        borderWidth: 1.5
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: c.grid }, ticks: { color: c.text, font: { size: 10 } } },
+        y: { min: 0, max: 3, ticks: { stepSize: 1, color: c.text, font: { size: 10 } }, grid: { color: c.grid } }
+      }
+    }
+  });
+}
+
+/* ═══════════════════════════════════
+   SYNC: EXPORT / IMPORT
+═══════════════════════════════════ */
+function exportData() {
+  const blob = new Blob([JSON.stringify({ version:2, exported: new Date().toISOString(), data: DB }, null, 2)], { type:'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `rahul-tracker-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  const s = document.getElementById('syncStatus');
+  if (s) s.textContent = '✅ Exported successfully — save this file to sync across devices.';
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
+      const data = parsed.data || parsed;
+      Object.assign(DB, data);
+      saveDB();
+      initTracker();
+      const s = document.getElementById('syncStatus');
+      if (s) s.textContent = `✅ Imported from ${file.name} — data merged.`;
+    } catch(err) {
+      const s = document.getElementById('syncStatus');
+      if (s) s.textContent = '❌ Import failed — invalid file.';
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+/* ═══════════════════════════════════
+   BOOT
+═══════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', initTracker);
 </script>
 </body>
 </html>
